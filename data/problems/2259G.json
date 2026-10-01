@@ -1,0 +1,34 @@
+{
+  "problem_id": "2259G",
+  "contest_id": "2259",
+  "problem_index": "G",
+  "url": "https://codeforces.com/problemset/problem/2259/G",
+  "tags": [
+    "binary search",
+    "data structures",
+    "math"
+  ],
+  "rating": 1900,
+  "title": "Index Removal",
+  "time_limit": "2 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "An array $$$b_1, b_2, \\ldots, b_m$$$ is good if, for each $$$i$$$ $$$(1 \\leq i \\lt m)$$$, $$$b_{i+1} \\geq b_i$$$ and $$$b_{i+1} - b_i \\leq k$$$. An array of length $$$1$$$ is always good.\nYou are given an\ninitially good\narray $$$a_1, a_2, \\ldots, a_n$$$. Solve the following problem for each $$$i$$$ $$$(1 \\leq i \\leq n)$$$\nindependently\n:\n\nThe $$$i$$$-th element of $$$a$$$ is removed, making $$$a = [a_1, a_2, \\ldots, a_{i-1}, a_{i+1}, \\ldots, a_n]$$$. In one operation, you are able to subtract $$$1$$$ from any element of $$$a$$$. What is the minimum number of operations required to make $$$a$$$ good again?",
+  "input": "The first line of each input contains $$$t$$$ ($$$1 \\leq t \\leq 10^4$$$) — the number of test cases.\nThe first line of each test case contains two integers $$$n$$$ and $$$k$$$ ($$$2 \\leq n \\leq 2 \\cdot 10^5, 1 \\leq k \\leq 10^9$$$).\nThe second line of each test case contains $$$n$$$ integers $$$a_1, a_2, \\ldots, a_n$$$ ($$$1 \\leq a_i \\leq 10^9$$$). It is guaranteed that $$$a$$$ is initially good.\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2 \\cdot 10^5$$$.",
+  "output": "For each test case, output $$$n$$$ space separated integers on a single line: the $$$i$$$-th integer denoting the solution to the problem for the $$$i$$$-th index.",
+  "examples": [
+    {
+      "input": "74 21 2 4 54 11 2 3 45 71 8 9 16 205 10000000001 6 7 67 67676 11 1 2 2 3 44 11 2 3 34 21 2 4 6",
+      "output": "0 1 1 0 0 2 1 0 0 2 1 4 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 2 2 0 "
+    }
+  ],
+  "note": "In the first test case:\n\n$$$i = 1$$$, $$$a = [2, 4, 5]$$$. Since $$$a$$$ is still good, we do not need to perform any operations.\n$$$i = 2$$$, $$$a = [1, 4, 5]$$$. If we perform the operation once on the $$$2$$$nd element, $$$a = [1, 3, 5]$$$, which is a good array.\n$$$i = 3$$$, $$$a = [1, 2, 5]$$$. If we perform the operation once on the $$$3$$$rd element, $$$a = [1, 2, 4]$$$, which is a good array.\n$$$i = 4$$$, $$$a = [1, 2, 4]$$$. Since $$$a$$$ is still good, we do not need to perform any operations.\nIn the fourth test case, $$$a$$$ will remain good no matter what element we remove, so the answer for each index is $$$0$$$.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156457",
+    "content": "2259G - Index Removal\n\nHint 1\nIgnoring indexes 1 and $$$n$$$, if we remove index $$$i$$$, if we perform an operation on index $$$j$$$, all elements between $$$[i, j]$$$ will also have an operation performed on them.\nHint 2\nIf we remove index $$$i$$$, and we have to reduce the element at index $$$i+1$$$, $$$i+2$$$, etc, what will we subtract it to?\nSolution\nTutorial is loading...\nCode\n#include <bits/stdc++.h>\nusing namespace std;\n\n#define ll long long\nint main() {\nint t;\ncin >> t;\n\nwhile (t--) {\nll n, k;\ncin >> n >> k;\n\nvector<ll> vec(n); for (auto &x: vec) cin >> x;\nvector<ll> vec_2(n); for (int i = 0; i < n; i++) vec_2[i] = vec[i] - i * k;\n\nvector<ll> prefix(n); prefix[0] = vec[0];\nfor (int i = 1; i < n; i++) prefix[i] = prefix[i-1] + vec[i];\n\nvector<ll> ans(n);\nfor (int i = 1; i < n-1; i++) {\nint lo = i+1;\nint hi = n-1;\nwhile (lo <= hi) {\nint mid = lo + (hi - lo) / 2;\nif (vec_2[mid] <= (vec[i-1] - i*k)) hi = mid - 1;\nelse lo = mid + 1;\n}\n\nll num_needed = (lo - i - 1);\nans[i] = (prefix[num_needed + i] - prefix[i]) - (k * (num_needed * (num_needed + 1))/2) - vec[i-1] * num_needed;\n}\nfor (auto &x: ans) cout << x << \" \";\ncout << \"\\n\";\n}\n}\n\nDifficulty\n\nToo hard\n\nA bit on the harder side\n\nGood difficulty\n\nEasy\n\nToo easy\nQuality\n\nAmazing\n\nGood\n\nSo-so\n\nBad\n\nAwful",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \n#define ll long long\nint main() {\n    int t;\n    cin >> t;\n \n    while (t--) {\n        ll n, k;\n        cin >> n >> k;\n \n        vector<ll> vec(n); for (auto &x: vec) cin >> x;\n        vector<ll> vec_2(n); for (int i = 0; i < n; i++) vec_2[i] = vec[i] - i * k;\n \n        vector<ll> prefix(n); prefix[0] = vec[0];\n        for (int i = 1; i < n; i++) prefix[i] = prefix[i-1] + vec[i];\n \n        vector<ll> ans(n);\n        for (int i = 1; i < n-1; i++) {\n            int lo = i+1;\n            int hi = n-1;\n            while (lo <= hi) {\n                int mid = lo + (hi - lo) / 2;\n                if (vec_2[mid] <= (vec[i-1] - i*k)) hi = mid - 1;\n                else lo = mid + 1;\n            }\n            \n            ll num_needed = (lo - i - 1);\n            ans[i] = (prefix[num_needed + i] - prefix[i]) - (k * (num_needed * (num_needed + 1))/2) - vec[i-1] * num_needed;\n        }\n        for (auto &x: ans) cout << x << \" \";\n        cout << \"\\n\";\n    }\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:29:35.599496+00:00"
+}

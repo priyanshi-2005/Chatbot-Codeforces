@@ -1,0 +1,40 @@
+{
+  "problem_id": "2264A",
+  "contest_id": "2264",
+  "problem_index": "A",
+  "url": "https://codeforces.com/problemset/problem/2264/A",
+  "tags": [
+    "implementation",
+    "implementation",
+    "implementation",
+    "sortings",
+    "sortings",
+    "sortings",
+    "two pointers",
+    "two pointers",
+    "two pointers"
+  ],
+  "rating": 800,
+  "title": "Rumb Needs a Hand",
+  "time_limit": "1 second",
+  "memory_limit": "256 megabytes",
+  "description": "Mr. Rumb visits a prosthetist because his arms have gone numb. The prosthetist can assemble replacements, but their numbered components are out of order. Apparently, even getting a helping hand requires some assembly.\nFormally, the labels on the components form a permutation$$$^{\\text{∗}}$$$ $$$p$$$ of length $$$n$$$. Mr. Rumb can program a machine to perform the following operation\nexactly once\n:\n\nchoose an integer $$$m$$$ ($$$1 \\le m \\le n$$$) and indices $$$i_1 \\lt i_2 \\lt \\ldots \\lt i_m$$$;\nreverse the elements of $$$p$$$ at the chosen indices. More precisely, for every $$$j$$$ from $$$1$$$ to $$$m$$$, the element at index $$$i_j$$$ moves to index $$$i_{m-j+1}$$$. All other elements remain unchanged.\nThe chosen indices do not have to be consecutive. For example, suppose $$$p = [1, {\\color{red}{6}}, 3, {\\color{red}{4}}, 5, {\\color{red}{2}}]$$$. If you choose indices $$$2$$$, $$$4$$$, and $$$6$$$, the elements shown in red are reversed, and $$$p$$$ becomes $$$[1, {\\color{red}{2}}, 3, {\\color{red}{4}}, 5, {\\color{red}{6}}]$$$.\nDetermine whether Mr. Rumb can sort $$$p$$$ in increasing order.\n$$$^{\\text{∗}}$$$A permutation of length $$$n$$$ is an array consisting of $$$n$$$ distinct integers from $$$1$$$ to $$$n$$$ in arbitrary order. For example, $$$[2,3,1,5,4]$$$ is a permutation, but $$$[1,2,2]$$$ is not a permutation ($$$2$$$ appears twice in the array), and $$$[1,3,4]$$$ is also not a permutation ($$$n=3$$$ but there is $$$4$$$ in the array).",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 500$$$). The description of the test cases follows.\nThe first line of each test case contains a single integer $$$n$$$ ($$$1 \\le n \\le 100$$$).\nThe second line contains a permutation $$$p_1, p_2, \\ldots, p_n$$$ of the integers from $$$1$$$ to $$$n$$$.",
+  "output": "For each test case, output\nYES\nif it is possible to sort $$$p$$$ in increasing order after performing exactly one operation. Otherwise, output\nNO\n.\nYou can output the answer in any case (upper or lower). For example, the strings\nyEs\n,\nyes\n,\nYes\n, and\nYES\nwill be recognized as positive responses.",
+  "examples": [
+    {
+      "input": "51144 2 3 143 4 1 252 1 3 5 461 6 3 4 5 2",
+      "output": "YESYESNONOYES"
+    }
+  ],
+  "note": "In the first test case, choose the only index. Reversing a single element does not change the permutation, so the requirement to perform exactly one operation is satisfied.\nIn the second test case, choose indices $$$1$$$ and $$$4$$$. The resulting permutation is $$$[1, 2, 3, 4]$$$.\nIn the fifth test case, choose indices $$$2$$$, $$$4$$$, and $$$6$$$. Notice that the chosen indices are not consecutive.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156680",
+    "content": "2264A - Rumb Needs a Hand\nProblem by\nqwexd\n.\nHint\nLook at the elements that are not in the right position. Which of them must be selected? Can selecting any other element help?\nSolution\nEvery element that is not in the right position has to be selected; otherwise, it never moves.\nSelecting an element that is already in the right position cannot help. For it to stay correct after the reversal, it has to be paired with itself, because its value occurs nowhere else in the permutation. Thus it can only be the middle selected element, and removing it changes nothing.\nSo, if the array is already sorted, choose any one element. Otherwise, select exactly the misplaced elements and reverse them. The answer is\nYES\nif this sorts the array, and\nNO\notherwise.\nIf the misplaced positions are listed from left to right, the reversal pairs the first with the last, the second with the second-last, and so on. Check that every pair contains the two values those positions need.\nThis takes $$$O(n)$$$ time and $$$O(n)$$$ memory.\nCode (GNU C++17)\n#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main() {\nios::sync_with_stdio(false);\ncin.tie(nullptr);\n\nint t;\ncin >> t;\nwhile (t--) {\nint n;\ncin >> n;\n\nvector<int> p(n);\nfor (int &x : p) cin >> x;\n\nvector<int> bad;\nfor (int i = 0; i < n; ++i) {\nif (p[i] != i + 1) {\nbad.push_back(i);\n}\n}\n\nbool ok = true;\nint k = bad.size();\nfor (int i = 0; i < k; ++i) {\nif (p[bad[i]] != bad[k - 1 - i] + 1) {\nok = false;\nbreak;\n}\n}\n\ncout << (ok ? \"YES\\n\" : \"NO\\n\");\n}\n}",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int t;\n    cin >> t;\n    while (t--) {\n        int n;\n        cin >> n;\n\n        vector<int> p(n);\n        for (int &x : p) cin >> x;\n\n        vector<int> bad;\n        for (int i = 0; i < n; ++i) {\n            if (p[i] != i + 1) {\n                bad.push_back(i);\n            }\n        }\n\n        bool ok = true;\n        int k = bad.size();\n        for (int i = 0; i < k; ++i) {\n            if (p[bad[i]] != bad[k - 1 - i] + 1) {\n                ok = false;\n                break;\n            }\n        }\n\n        cout << (ok ? \"YES\\n\" : \"NO\\n\");\n    }\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:49.986827+00:00"
+}

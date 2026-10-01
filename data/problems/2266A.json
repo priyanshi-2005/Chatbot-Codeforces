@@ -1,0 +1,32 @@
+{
+  "problem_id": "2266A",
+  "contest_id": "2266",
+  "problem_index": "A",
+  "url": "https://codeforces.com/problemset/problem/2266/A",
+  "tags": [
+    "greedy"
+  ],
+  "rating": null,
+  "title": "Good Contest",
+  "time_limit": "1 second",
+  "memory_limit": "256 megabytes",
+  "description": "The next programming contest has three problems and $$$n$$$ participants.\nProblem $$$1$$$ is easy, problem $$$2$$$ is medium, and problem $$$3$$$ is hard.\nA participant is called\nweak\nif they did not solve all three problems.\nUnfortunately, the scoreboard was lost. The only remaining information is an array $$$a$$$ of length $$$3$$$, where $$$a_i$$$ is the number of participants who solved problem $$$i$$$.\nAmong all scoreboards consistent with this information, find the minimum possible number of weak participants.",
+  "input": "The first line contains an integer $$$t$$$ ($$$1 \\le t \\le 3000$$$) — the number of test cases.\nThe first line of each test case contains an integer $$$n$$$ ($$$1 \\le n \\le 9$$$) — the number of participants.\nThe second line of each test case contains three integers $$$a_1, a_2, a_3$$$ ($$$0 \\le a_i \\le n$$$), where $$$a_i$$$ is the number of participants who solved problem $$$i$$$.",
+  "output": "For each test case, print a single integer — the minimum possible number of weak participants.",
+  "examples": [
+    {
+      "input": "633 3 344 4 311 1 199 8 950 5 564 3 2",
+      "output": "010154"
+    }
+  ],
+  "note": "In the first test case, all $$$3$$$ participants can have solved all three problems, so the answer is $$$0$$$.\nIn the second test case, participant $$$1$$$ could have solved only problems $$$1$$$ and $$$2$$$, while participants $$$2$$$, $$$3$$$, and $$$4$$$ solved all three problems. Therefore, participant $$$1$$$ is the only participant who is weak, so the answer is $$$1$$$. It can be shown that this is minimal.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156984",
+    "content": "2266A - Good Contest\nHint\nHow many participants can possibly have solved all three problems?\nSolution\nAt most $$$\\min(a_1,a_2,a_3)$$$ participants could have solved all three problems. This is achievable by making the same $$$\\min(a_1,a_2,a_3)$$$ participants solve every problem, then distributing the remaining solves arbitrarily.\nThus, the answer is $$$n-\\min(a_1,a_2,a_3)$$$.\nThe complexity is $$$O(1)$$$ per test case.\nCode (C++)\n#include <bits/stdc++.h>\nusing namespace std;\n\nvoid solve() {\nint N; cin >> N;\nint a, b, c; cin >> a >> b >> c;\nint m = min({a,b,c});\ncout << N-m << endl;\n}\n\nint main() {\nint T; cin >> T;\nwhile (T--) {solve();}\n}\n\nRate the problem!\nDifficulty\n\nTrivial problem\n\nEasy problem\n\nAverage problem\n\nHard problem\n\nImpossible problem\n\nQuality\n\nExcellent problem\n\nGood problem\n\nAverage problem\n\nBad problem\n\nHorrible problem",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid solve() {\n    int N; cin >> N;\n    int a, b, c; cin >> a >> b >> c;\n    int m = min({a,b,c});\n    cout << N-m << endl;\n}\n\nint main() {\n    int T; cin >> T;\n    while (T--) {solve();}\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:33.208466+00:00"
+}

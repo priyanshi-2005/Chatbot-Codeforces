@@ -1,0 +1,32 @@
+{
+  "problem_id": "2260A",
+  "contest_id": "2260",
+  "problem_index": "A",
+  "url": "https://codeforces.com/problemset/problem/2260/A",
+  "tags": [
+    "implementation"
+  ],
+  "rating": 800,
+  "title": "Monocarp's Contest",
+  "time_limit": "2 seconds",
+  "memory_limit": "512 megabytes",
+  "description": "Monocarp is preparing a team programming contest. The contest has $$$n$$$ problems, each of which is either easy or hard. The problems are numbered from $$$1$$$ to $$$n$$$.\nMonocarp wants the first and the last problems of the contest to be easy. In one operation, he can choose any two problems and swap them.\nDetermine the minimum number of operations required to make the first and the last problems easy, or report that it is impossible.",
+  "input": "The first line contains an integer $$$t$$$ ($$$1 \\le t \\le 10^3$$$) — the number of test cases.\nEach test case consists of two lines\n\nthe first line contains one integer $$$n$$$ ($$$2 \\le n \\le 50$$$) — the number of problems in the contest;\nthe second line contains $$$n$$$ integers $$$a_1, a_2, \\ldots, a_n$$$ ($$$0 \\le a_i \\le 1$$$). If $$$a_i=0$$$, then the problem with number $$$i$$$ is easy; if $$$a_i=1$$$, then it is hard.",
+  "output": "For each test case, print the minimum number of operations required to make the first and the last problems easy. If it is impossible to satisfy the requirement, print $$$-1$$$.",
+  "examples": [
+    {
+      "input": "420 020 161 0 0 1 0 051 0 0 1 1",
+      "output": "0-112"
+    }
+  ],
+  "note": "In the first test case, the first and the last problems are already easy, so no operations are needed.\nIn the second test case, there is only one easy problem, so it is impossible to make both the first and the last problems easy.\nIn the third test case, one can swap the first and the second problems.\nIn the fourth test case, one can first swap the first and the second problems, and then — the third and the fifth problems.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156529",
+    "content": "2260A - Monocarp's Contest\nTutorial\nTutorial is loading...\nSolution\nt = int(input())\nfor i in range(t):\nn = int(input())\na = list(map(int, input().split()))\n\ncnt0 = a.count(0)\nif cnt0 >= 2:\nprint(a[0] + a[-1])\nelse:\nprint(-1)",
+    "code_blocks": [
+      "t = int(input())\nfor i in range(t):\n    n = int(input())\n    a = list(map(int, input().split()))\n    \n    cnt0 = a.count(0)\n    if cnt0 >= 2:\n        print(a[0] + a[-1])\n    else:\n        print(-1)"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:29:28.487179+00:00"
+}

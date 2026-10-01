@@ -1,0 +1,35 @@
+{
+  "problem_id": "2266E",
+  "contest_id": "2266",
+  "problem_index": "E",
+  "url": "https://codeforces.com/problemset/problem/2266/E",
+  "tags": [
+    "brute force",
+    "dp",
+    "math",
+    "number theory"
+  ],
+  "rating": null,
+  "title": "Prime Destruction",
+  "time_limit": "2 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "You are given a\nmultiset\n$$$a$$$ consisting of $$$n$$$ positive integers.\nYou may perform the following operation any number of times (possibly zero):\n\nChoose an integer $$$x \\gt 1$$$ from the multiset and a prime divisor $$$p$$$ of $$$x$$$. Remove one occurrence of $$$x$$$ from the multiset and add $$$p$$$ copies of $$$\\frac{x}{p}$$$.\nYou are also given an integer $$$k$$$ ($$$1 \\le k \\le n$$$). Let $$$f(k)$$$ be the minimum number of operations required, starting from the original multiset, until every integer in the multiset is at most $$$k$$$.\nFind $$$f(k)$$$.",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 10^4$$$). The description of the test cases follows.\nThe first line of each test case contains two integers $$$n$$$ and $$$k$$$ ($$$1 \\le k \\le n \\le 2 \\cdot 10^5$$$) — the initial size of the multiset and the given integer, respectively.\nThe second line of each test case contains $$$n$$$ integers $$$a_1, a_2, \\ldots, a_n$$$ ($$$1 \\le a_i \\le n$$$) — the elements of the multiset.\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2 \\cdot 10^5$$$.",
+  "output": "For each test case, print a single integer $$$f(k)$$$.",
+  "examples": [
+    {
+      "input": "61 116 26 6 4 3 2 18 18 6 4 3 2 1 8 612 312 10 9 8 7 6 5 4 3 2 1 1210 910 9 8 7 6 5 4 3 2 15 55 4 3 2 1",
+      "output": "04251510"
+    }
+  ],
+  "note": "In the first test case, the only element is already at most $$$k$$$, so no operations are needed.\nIn the second test case, we can perform the following operations:\n$$$[\\color{red}{6},6,4,3,2,1] \\rightarrow [\\color{red}{2,2,2},6,4,3,2,1]$$$,\n$$$[2,2,2,\\color{red}{6},4,3,2,1] \\rightarrow [2,2,2,\\color{red}{2,2,2},4,3,2,1]$$$,\n$$$[2,2,2,2,2,2,\\color{red}{4},3,2,1] \\rightarrow [2,2,2,2,2,2,\\color{red}{2,2},3,2,1]$$$,\n$$$[2,2,2,2,2,2,2,2,\\color{red}{3},2,1] \\rightarrow [2,2,2,2,2,2,2,2,\\color{red}{1,1,1},2,1]$$$.\nThus, $$$4$$$ operations are sufficient. It can be shown that no sequence with strictly fewer operations exists.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156984",
+    "content": "2266E - Prime Destruction\nHint\nUse DP. Let $$$dp_i$$$ be the minimum number of operations needed to turn one $$$i$$$ into elements which are all at most $$$k$$$.\nSolution\nLet $$$dp_i$$$ be the minimum number of operations needed to turn one $$$i$$$ into elements which are all at most $$$k$$$. Clearly, $$$dp_i=0$$$ for $$$i\\leq k$$$.\nFor $$$i \\gt k$$$, suppose we choose a prime divisor $$$p$$$ of $$$i$$$. One operation gives us $$$p$$$ copies of $$$i/p$$$, and these copies can then be handled independently. Thus, $$$dp_i=\\min_{p\\mid i,\\ p\\text{ prime}}(1+p\\cdot dp_{i/p})$$$.\nSince $$$i/p \\lt i$$$, compute the DP in increasing order. We can precompute the distinct prime divisors of every number with a sieve. Finally, the original elements are independent, so the answer is $$$\\sum dp_{a_i}$$$.\nThe complexity is $$$O(n\\log\\log n)$$$ per test case after preprocessing.\nBonus\nCan you solve the problem for all $$$f(1),f(2),\\ldots,f(n)$$$?\nThis was actually the original version of the problem!\nCode (C++)\n#include <bits/stdc++.h>\nusing namespace std;\n\nvector<long long> pf[200001];\nlong long dp[200001];\nbool cmp[200001];\n\nvoid pre() {\nfor (long long i = 2; i <= 200000; i++) {\nif (!cmp[i]) {\ncmp[i]=true;\nfor (long long j = 2*i; j <= 200000; j+=i) {\npf[j].push_back(i);\ncmp[j]=true;\n}\npf[i].push_back(i);\n}\n}\n}\n\nvoid solve() {\nlong long N, K; cin >> N >> K;\nlong long aa = 0;\nvector<long long> dp(N+1,1e18);\nfor (long long i = 1; i <= N; i++) {\nif (i<=K) {dp[i]=0;}\nfor (auto x : pf[i]) {dp[i]=min(dp[i],dp[i/x]*x+1);}\n}\nfor (long long i = 0; i < N; i++) {\nlong long a; cin >> a;\naa+=dp[a];\n}\ncout << aa << endl;\n}\n\nint main() {\npre();\nlong long T; cin >> T;\nwhile (T--) {solve();}\n}\n\nRate the problem!\nDifficulty\n\nTrivial problem\n\nEasy problem\n\nAverage problem\n\nHard problem\n\nImpossible problem\n\nQuality\n\nExcellent problem\n\nGood problem\n\nAverage problem\n\nBad problem\n\nHorrible problem",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvector<long long> pf[200001];\nlong long dp[200001];\nbool cmp[200001];\n\nvoid pre() {\n    for (long long i = 2; i <= 200000; i++) {\n        if (!cmp[i]) {\n            cmp[i]=true;\n            for (long long j = 2*i; j <= 200000; j+=i) {\n                pf[j].push_back(i);\n                cmp[j]=true;\n            }\n            pf[i].push_back(i);\n        }\n    }\n}\n\nvoid solve() {\n    long long N, K; cin >> N >> K;\n    long long aa = 0;\n    vector<long long> dp(N+1,1e18);\n    for (long long i = 1; i <= N; i++) {\n        if (i<=K) {dp[i]=0;}\n        for (auto x : pf[i]) {dp[i]=min(dp[i],dp[i/x]*x+1);}\n    }\n    for (long long i = 0; i < N; i++) {\n        long long a; cin >> a;\n        aa+=dp[a];\n    }\n    cout << aa << endl;\n}\n\nint main() {\n    pre();\n    long long T; cin >> T;\n    while (T--) {solve();}\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:24.820121+00:00"
+}

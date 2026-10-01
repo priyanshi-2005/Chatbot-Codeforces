@@ -1,0 +1,34 @@
+{
+  "problem_id": "2260B",
+  "contest_id": "2260",
+  "problem_index": "B",
+  "url": "https://codeforces.com/problemset/problem/2260/B",
+  "tags": [
+    "brute force",
+    "math",
+    "number theory"
+  ],
+  "rating": 900,
+  "title": "Monocarp and Projects",
+  "time_limit": "2 seconds",
+  "memory_limit": "512 megabytes",
+  "description": "Monocarp runs a company. Consider the work of his company over the next $$$k$$$ months. In the first month, the company has $$$x$$$ employees, not counting Monocarp himself, and $$$y$$$ projects need to be completed. In each next month, both the number of employees and the number of projects increase by $$$1$$$.\nIn other words, in month $$$i$$$ ($$$0 \\le i \\lt k$$$), the company has $$$x+i$$$ employees and needs to complete $$$y+i$$$ projects.\nIn each month, Monocarp distributes the projects among the employees. Each employee must receive the same number of projects, and each project can be assigned to at most one employee. Monocarp completes all unassigned projects himself. He always chooses a distribution that makes him complete as few projects as possible.\nIn particular, if in some month there are $$$a$$$ employees and $$$b$$$ projects, then Monocarp assigns exactly $$$\\left\\lfloor \\frac{b}{a} \\right\\rfloor$$$ projects to each employee, and he completes $$$b \\bmod a$$$ projects himself.\nFind the total number of projects that Monocarp will complete himself over the next $$$k$$$ months.",
+  "input": "The first line contains an integer $$$t$$$ — the number of test cases ($$$1 \\le t \\le 10^4$$$).\nEach test case consists of one line containing three integers $$$x$$$, $$$y$$$, and $$$k$$$ ($$$1 \\le x \\le y \\le 10^6$$$; $$$1 \\le k \\le 10^{12}$$$).\nAdditional constraint on the input:\n\nthe sum of $$$y$$$ over all test cases does not exceed $$$10^6$$$.",
+  "output": "For each test case, output one integer — the total number of projects that Monocarp will complete himself over $$$k$$$ months.",
+  "examples": [
+    {
+      "input": "71 1 13 10 23 8 67 20 110 25 1008 36 171 999900 1000000000000",
+      "output": "041861425110999898177699820694"
+    }
+  ],
+  "note": "In the first test case, the only employee completes the only project, so Monocarp is left with no projects.\nIn the second test case, in the first month, $$$10$$$ projects are distributed among $$$3$$$ employees: each gets $$$3$$$ projects, and Monocarp completes $$$1$$$ project. In the second month, $$$11$$$ projects are distributed among $$$4$$$ employees: each gets $$$2$$$ projects, and Monocarp completes $$$3$$$ projects. The answer is $$$1 + 3 = 4$$$.\nIn the third test case, the number of projects completed by Monocarp in the six months is $$$2$$$, $$$1$$$, $$$0$$$, $$$5$$$, $$$5$$$, and $$$5$$$, respectively. Their sum is $$$2 + 1 + 0 + 5 + 5 + 5 = 18$$$.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156529",
+    "content": "2260B - Monocarp and Projects\nTutorial\nTutorial is loading...\nSolution\n#include<bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve()\n{\nlong long x, y, k;\ncin >> x >> y >> k;\nlong long ans = 0;\nfor(long long i = 0; i < min(y, k); i++)\nans += (y + i) % (x + i);\nlong long full = max(0ll, k - y);\nans += full * (y - x);\ncout << ans << endl;\n}\n\nint main()\n{\nios_base::sync_with_stdio(0);\ncin.tie(0);\nint t;\ncin >> t;\nfor(int i = 0; i < t; i++)\nsolve();\n}",
+    "code_blocks": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve()\n{\n    long long x, y, k;\n    cin >> x >> y >> k;\n    long long ans = 0;\n    for(long long i = 0; i < min(y, k); i++)\n        ans += (y + i) % (x + i);\n    long long full = max(0ll, k - y);\n    ans += full * (y - x);\n    cout << ans << endl;    \n}\n\nint main()\n{\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    int t;\n    cin >> t;\n    for(int i = 0; i < t; i++)\n        solve();\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:29:26.434037+00:00"
+}

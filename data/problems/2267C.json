@@ -1,0 +1,34 @@
+{
+  "problem_id": "2267C",
+  "contest_id": "2267",
+  "problem_index": "C",
+  "url": "https://codeforces.com/problemset/problem/2267/C",
+  "tags": [
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "rating": null,
+  "title": "GCD Treasury",
+  "time_limit": "2 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "The greedy pirate Dimash found a treasury. It consists of $$$n$$$ piles of coins, numbered from $$$1$$$ to $$$n$$$. The $$$i$$$-th pile contains exactly $$$a_i$$$ coins. Pirate Dimash has a number $$$x$$$ that he can use to steal coins from the treasury. The stealing process works as follows:\n\nFirst, he chooses an index $$$1\\le i\\le n$$$ such that $$$a_i\\gt 0$$$ and $$$\\gcd$$$$$$^{\\text{∗}}$$$$$$(a_i, x) \\neq 1$$$. If there is no such index, the pirate stops.\nNow let $$$\\gcd(a_i, x)$$$ be $$$g$$$. The pirate steals exactly $$$g$$$ coins from pile $$$i$$$, after which $$$a_i$$$ decreases by $$$g$$$.\nFinally, he sets $$$x$$$ to $$$g$$$ and continues stealing coins.\nYour task is to help the pirate steal the maximum possible number of coins. Find the maximum number of coins that can be stolen from the treasury.\n$$$^{\\text{∗}}$$$$$$\\gcd(a_i, x)$$$ denotes the\ngreatest common divisor (GCD)\nof integers $$$a_i$$$ and $$$x$$$.",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 10^4$$$). The description of the test cases follows.\nThe first line of each test case contains two integers $$$n$$$ and $$$x$$$ ($$$1\\le n, x\\le 3\\cdot 10^5$$$) — the number of piles of coins in the treasury and the pirate's number.\nThe second line of each test case contains $$$n$$$ integers $$$a_1, a_2, \\ldots a_n$$$ ($$$1 \\le a_i \\le 3\\cdot 10^5$$$).\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$3\\cdot 10^5$$$.",
+  "output": "For each test case, output one number — the maximum number of coins that can be stolen.",
+  "examples": [
+    {
+      "input": "53 12 3 53 42 3 44 22 2 2 26 62 3 2 3 2 37 69 9 4 4 4 4 4",
+      "output": "068920"
+    }
+  ],
+  "note": "In the first test case, no coin can be stolen.\nIn the second test case, the pirate steals as follows.\n\nThe pirate chooses pile number $$$3$$$. He takes $$$4$$$ coins, after which the treasury becomes $$$[2, 3, 0]$$$ and $$$x$$$ becomes $$$4$$$.\nThe pirate chooses pile number $$$1$$$. He takes $$$2$$$ coins, after which the treasury becomes $$$[0, 3, 0]$$$, and $$$x$$$ becomes $$$2$$$.\nNo suitable indices remain, so the pirate stops. The pirate managed to take $$$4 + 2 = 6$$$ coins.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/157126",
+    "content": "2267C - GCD Treasury\n\nIdea:\nDibamboo\n\nSolution + Editorial:\nKluydQ\n\nSolution\nTutorial is loading...\nImplementation\n#include <bits/stdc++.h>\n#define ll long long\n\nconst int N = 3e5 + 12;\nusing namespace std;\n\nint n, x, a[N], p[N];\nll cnt[N];\n\nvector <int> vc[N];\n\nvoid solve()\n{\ncin >> n >> x;\n\nfor(int i = 1; i <= n; i ++)\n{\ncin >> a[i];\nint r = a[i];\na[i] = __gcd(a[i], x);\n\nfor(auto j : vc[a[i]])\n{\ncnt[j] += r;\n}\n}\nll ans = 0;\n\nfor(auto j : vc[x])\n{\nans = max(ans, cnt[j]);\n}\nfor(int i = 1; i <= n; i ++)\n{\nfor(auto j : vc[a[i]]) cnt[j] = 0;\n}\ncout << ans << '\\n';\n}\nsigned main()\n{\nios_base::sync_with_stdio(0), cin.tie(0);\n\nfor(int i = 2; i <= N - 12; i ++)\n{\nif(!p[i])\n{\nfor(int j = i; j <= N - 12; j += i)\n{\np[j] = 1;\nvc[j].push_back(i);\n}\n}\n}\nint test = 0;\nif(!test) cin >> test;\nwhile(test --) solve();\n}\n// solved by KluydQ\n\nDid you like the problem?\n\nGreat problem\n\nGood problem\n\nBad problem\n\nDidn't solve",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\n#define ll long long\n\nconst int N = 3e5 + 12;\nusing namespace std;\n\nint n, x, a[N], p[N];\nll cnt[N];\n\nvector <int> vc[N];\n\nvoid solve()\n{\n\tcin >> n >> x;\n\t\n\tfor(int i = 1; i <= n; i ++)\n\t{\n\t\tcin >> a[i];\n\t\tint r = a[i];\n\t\ta[i] = __gcd(a[i], x);\n\t\t\n\t\tfor(auto j : vc[a[i]])\n\t\t{\n\t\t\tcnt[j] += r;\n\t\t}\n\t}\n\tll ans = 0;\n\t\n\tfor(auto j : vc[x])\n\t{\n\t\tans = max(ans, cnt[j]);\n\t}\n\tfor(int i = 1; i <= n; i ++)\n\t{\n\t\tfor(auto j : vc[a[i]]) cnt[j] = 0;\n\t}\n\tcout << ans << '\\n';\n}\nsigned main()\n{\n\tios_base::sync_with_stdio(0), cin.tie(0);\n\t\n\tfor(int i = 2; i <= N - 12; i ++)\n\t{\n\t\tif(!p[i])\n\t\t{\n\t\t\tfor(int j = i; j <= N - 12; j += i)\n\t\t\t{\n\t\t\t\tp[j] = 1;\n\t\t\t\tvc[j].push_back(i);\n\t\t\t}\n\t\t}\n\t}\n\tint test = 0;\n\tif(!test) cin >> test;\n\twhile(test --) solve();\n}\n// solved by KluydQ"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:09.091943+00:00"
+}

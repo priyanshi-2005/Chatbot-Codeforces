@@ -1,0 +1,34 @@
+{
+  "problem_id": "2262A2",
+  "contest_id": "2262",
+  "problem_index": "A2",
+  "url": "https://codeforces.com/problemset/problem/2262/A2",
+  "tags": [
+    "dp",
+    "implementation",
+    "math"
+  ],
+  "rating": 1800,
+  "title": "Floor of MEX (Hard Version)",
+  "time_limit": "2 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "This is the hard version of the problem. The difference between the versions is that in this version, you need to count how many sets satisfy the constraints. You can hack only if you solved all versions of this problem.\nLet $$$$$$ f(S,x)=\\text{mex}\\left(\\left\\{\\left\\lfloor \\frac{y}{x}\\right\\rfloor : y\\in S\\right\\}\\right), $$$$$$ where $$$S$$$ is a set of non-negative integers and $$$x$$$ is a positive integer. $$$^{\\text{∗}}$$$\nFarmer John chooses a (possibly empty) subset $$$A\\subseteq \\{0,1,\\ldots,n-1\\}$$$. He then constructs an array $$$a$$$ of length $$$n$$$, where $$$a_k = f(A,k)$$$ for every $$$1\\le k\\le n$$$.\nBessie, being a mischievous cow, hides the set $$$A$$$. Farmer John is left only with the array $$$a_1,a_2,\\ldots,a_n$$$.\nYour task is to count how many sets (including the empty set) $$$B \\subseteq \\{0,1,\\ldots,n-1\\}$$$ such that $$$f(B,k)=a_k$$$ for every $$$1 \\le k \\le n$$$. Since the number can be very large, output it modulo $$$10^9+7$$$.\nFarmer John will only give you arrays where such a $$$B$$$ exists\n.\n$$$^{\\text{∗}}$$$$$$\\operatorname{mex}(c)$$$ denotes the minimum excluded (MEX)$$$^{\\text{∗}}$$$ of the collection $$$c$$$. (in this case, the minimum non-negative integer not present in the set)",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 10^4$$$). The description of the test cases follows.\nThe first line of each test case contains a single integer $$$n$$$ ($$$1 \\leq n \\leq 10^5$$$).\nThe second line of each test case contains $$$n$$$ integers $$$a_1,a_2,\\ldots,a_n$$$ ($$$0 \\leq a_i \\leq n$$$).\nYou will only be given arrays where there exists $$$B \\subseteq \\{0,1,\\ldots,n-1\\}$$$ such that $$$f(B,k)=a_k$$$ for every $$$1 \\le k \\le n$$$.\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$10^5$$$.",
+  "output": "For each testcase, output one number, the number of sets $$$B$$$ that satisfy the constraints modulo $$$10^9 + 7$$$.",
+  "examples": [
+    {
+      "input": "360 3 2 2 2 152 1 1 1 161 2 1 1 1 1",
+      "output": "611"
+    }
+  ],
+  "note": "For the first testcase, the $$$6$$$ subsets are $$$$$$\\{1, 2, 5\\}, \\{1, 3, 5\\}, \\{1, 2, 3, 5\\}, \\{1, 2, 4, 5\\}, \\{1, 3, 4, 5\\}, \\{1, 2, 3, 4, 5\\}.$$$$$$\nFor the second testcase, the only subset that satisfies $$$f(B,k) = a_k$$$ for every $$$1 \\le k \\le n$$$ is $$$\\{0, 1\\}$$$.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156688",
+    "content": "2263C2 - Floor of MEX (Hard Version)\n/\n2262A2 - Floor of MEX (Hard Version)\nAuthor:\nkondasujay2\nTutorial\nTutorial is loading...\nSolution\n#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 1e9 + 7;\n\nvoid tc() {\nint n; cin >> n;\nvector<int> b(n + 1);\nfor(int i = 1; i <= n; i++) cin >> b[i];\nvector<pair<int, int>> goodivs;\nvector<pair<int, int>> badivs;\nfor(int i = 1; i <= n; i++) {\nif(b[i] > (n - 1) / i + 1) {\ncout << 0 << endl;\nreturn;\n}\nbadivs.push_back({b[i] * i, (b[i] + 1) * i - 1});\nfor(int j = 0; j < b[i]; j++) {\ngoodivs.push_back({j * i, (j + 1) * i - 1});\n}\n}\nvector<int> d(n + 1);\nfor(auto [l, r] : badivs) {\nd[min(n, l)]++;\nd[min(n, r + 1)]--;\n}\nint csm = 0;\nvector<int> gnums;\nfor(int i = 0; i < n; i++) {\ncsm += d[i];\nif(csm == 0) {\ngnums.push_back(i);\n}\n}\nset<pair<int, int>> st;\nsort(goodivs.begin(), goodivs.end(), [&] (pair<int, int> iv, pair<int, int> iv2) {\nreturn iv.second - iv.first < iv2.second - iv2.first;\n});\nfor(auto [l, r] : goodivs) {\nauto it = st.lower_bound({l, 0});\nif(it != st.end() && it->second <= r) {\ncontinue;\n}\nst.insert({l, r});\n}\n\nvector<pair<int, int>> impivs(st.begin(), st.end());\nint l = 0, r = 0;\nvector<int> dp(impivs.size() + 1);\ndp[0] = 1;\nint poss = 1;\nfor(int i : gnums) {\nwhile(l < impivs.size() && impivs[l].second < i) {\nposs += MOD - dp[l];\nposs %= MOD;\nl++;\n}\nwhile(r < impivs.size() && impivs[r].first <= i) r++;\ndp[r] += poss;\ndp[r] %= MOD;\nposs += poss;\nposs %= MOD;\n}\ncout << dp[impivs.size()] << endl;\n}\n\nint main() {\nios::sync_with_stdio(false), cin.tie(nullptr);\nint t; cin >> t;\nwhile(t--) tc();\n}\n\nRate the problem\n\nAmazing:\n\nGood:\n\nOk:\n\nBad:\n\nTerrible:",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 1e9 + 7;\n\nvoid tc() {\n    int n; cin >> n;\n    vector<int> b(n + 1);\n    for(int i = 1; i <= n; i++) cin >> b[i];\n    vector<pair<int, int>> goodivs;\n    vector<pair<int, int>> badivs;\n    for(int i = 1; i <= n; i++) {\n        if(b[i] > (n - 1) / i + 1) {\n            cout << 0 << endl;\n            return;\n        }\n        badivs.push_back({b[i] * i, (b[i] + 1) * i - 1});\n        for(int j = 0; j < b[i]; j++) {\n            goodivs.push_back({j * i, (j + 1) * i - 1});\n        }\n    }\n    vector<int> d(n + 1);\n    for(auto [l, r] : badivs) {\n        d[min(n, l)]++;\n        d[min(n, r + 1)]--;\n    }\n    int csm = 0;\n    vector<int> gnums;\n    for(int i = 0; i < n; i++) {\n        csm += d[i];\n        if(csm == 0) {\n            gnums.push_back(i);\n        }\n    }\n    set<pair<int, int>> st;\n    sort(goodivs.begin(), goodivs.end(), [&] (pair<int, int> iv, pair<int, int> iv2) {\n        return iv.second - iv.first < iv2.second - iv2.first;\n    });\n    for(auto [l, r] : goodivs) {\n        auto it = st.lower_bound({l, 0});\n        if(it != st.end() && it->second <= r) {\n            continue;\n        }\n        st.insert({l, r});\n    }\n\n    vector<pair<int, int>> impivs(st.begin(), st.end());\n    int l = 0, r = 0;\n    vector<int> dp(impivs.size() + 1);\n    dp[0] = 1;\n    int poss = 1;\n    for(int i : gnums) {\n        while(l < impivs.size() && impivs[l].second < i) {\n            poss += MOD - dp[l];\n            poss %= MOD;\n            l++;\n        }\n        while(r < impivs.size() && impivs[r].first <= i) r++;\n        dp[r] += poss;\n        dp[r] %= MOD;\n        poss += poss;\n        poss %= MOD;\n    }\n    cout << dp[impivs.size()] << endl;\n}\n\nint main() {\n    ios::sync_with_stdio(false), cin.tie(nullptr);\n    int t; cin >> t;\n    while(t--) tc();\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:29:09.381744+00:00"
+}

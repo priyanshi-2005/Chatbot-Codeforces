@@ -1,0 +1,33 @@
+{
+  "problem_id": "2267A",
+  "contest_id": "2267",
+  "problem_index": "A",
+  "url": "https://codeforces.com/problemset/problem/2267/A",
+  "tags": [
+    "greedy",
+    "strings"
+  ],
+  "rating": null,
+  "title": "Turn Into a Palindrome",
+  "time_limit": "1 second",
+  "memory_limit": "256 megabytes",
+  "description": "Ali has a string $$$s$$$ consisting of $$$n$$$ lowercase Latin letters. He also has a character $$$c$$$, which is a lowercase Latin letter. In one coin, he can perform the following operation on the string $$$s$$$:\n\nFirst, he chooses an index $$$1\\le i\\le n$$$.\nThen he replaces $$$s_i$$$ with the character $$$c$$$.\nAli wants to turn the string $$$s$$$ into a palindrome$$$^{\\text{∗}}$$$, but he does not want to spend too many coins on it. Your task — compute the minimum number of coins he has to spend to turn the string $$$s$$$ into a palindrome.\n$$$^{\\text{∗}}$$$A string $$$t$$$ of length $$$m$$$ is a palindrome if $$$t_i = t_{m-i+1}$$$ holds for every $$$1\\le i\\le m$$$",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 500$$$). The description of the test cases follows.\nThe first line of each test case contains an integer $$$n$$$ and a lowercase Latin letter $$$c$$$ ($$$1\\le n\\le 100$$$) — the length of the string $$$s$$$ and the character $$$c$$$.\nThe second line of each test case contains the string $$$s$$$ consisting of $$$n$$$ lowercase Latin letters.",
+  "output": "For each test case, output one number — the minimum number of coins Ali needs to spend for the string to become a palindrome.",
+  "examples": [
+    {
+      "input": "54 babca3 pxyx5 eabcbb8 dadbccbad10 ccodeforces",
+      "output": "10228"
+    }
+  ],
+  "note": "In the first test case, in one coin, you can replace $$$s_3$$$ with $$$\\texttt{b}$$$. After the replacement, the string becomes $$$\\texttt{abba}$$$, which is already a palindrome. It can be proven that $$$1$$$ is the minimum number of coins required.\nIn the second test case, the string $$$s$$$ is already a palindrome.\nIn the third test case, it is enough to change $$$s_1$$$ and $$$s_5$$$ to $$$\\texttt{e}$$$. After two replacements, the string becomes $$$\\texttt{ebcbe}$$$, which is already a palindrome.\nIn the fourth test case, in two coins, you can replace $$$s_1$$$ and $$$s_7$$$.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/157126",
+    "content": "2267A - Turn Into a Palindrome\n\nIdea:\nKluydQ\n\nSolution + Editorial:\nKluydQ\n\nSolution\nTutorial is loading...\nImplementation\n#include <bits/stdc++.h>\n\nusing namespace std;\n\nsigned main() {\nint T;\ncin >> T;\nwhile (T--) {\nint n;\ncin >> n;\nchar c; cin >> c;\nstring s; cin >> s;\nint ans = 0;\nfor (int i = 0; i < n / 2; ++i) {\nif (s[i] == s[n - i - 1]) continue;\nif (s[i] == c || s[n - i - 1] == c) ans++;\nelse ans+=2;\n}\ncout << ans << '\\n';\n}\n}\n\nDid you like the problem?\n\nGreat problem\n\nGood problem\n\nBad problem\n\nDidn't solve",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nsigned main() {\n    int T;\n    cin >> T;\n    while (T--) {\n        int n;\n        cin >> n;\n        char c; cin >> c;\n        string s; cin >> s;\n        int ans = 0;\n        for (int i = 0; i < n / 2; ++i) {\n            if (s[i] == s[n - i - 1]) continue;\n            if (s[i] == c || s[n - i - 1] == c) ans++;\n            else ans+=2;\n        }\n        cout << ans << '\\n';\n    }\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:13.288245+00:00"
+}

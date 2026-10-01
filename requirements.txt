@@ -1,0 +1,7 @@
+beautifulsoup4>=4.12,<5
+cloudscraper>=1.2.71,<2
+faiss-cpu>=1.8,<2
+numpy>=2.0,<3
+selenium>=4.20,<5
+torch>=2.2,<3
+transformers>=4.40,<5

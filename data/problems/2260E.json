@@ -1,0 +1,35 @@
+{
+  "problem_id": "2260E",
+  "contest_id": "2260",
+  "problem_index": "E",
+  "url": "https://codeforces.com/problemset/problem/2260/E",
+  "tags": [
+    "binary search",
+    "constructive algorithms",
+    "dp",
+    "math"
+  ],
+  "rating": 2000,
+  "title": "Cyclic Balance",
+  "time_limit": "2 seconds",
+  "memory_limit": "512 megabytes",
+  "description": "Consider a string $$$t=t_1t_2\\ldots t_m$$$ consisting of the characters\n0\nand\n1\n. We call the pairs of adjacent characters of the string $$$t$$$ the pairs $$$t_1t_2, t_2t_3, \\ldots, t_{m-1}t_m$$$, as well as the pair $$$t_mt_1$$$. The last pair connects the end of the string with its beginning, so exactly $$$m$$$ pairs are considered in total. If the string consists of only one character, the only pair that is considered is $$$t_1 t_1$$$.\nWe call a string $$$t$$$\ncyclically balanced\nif, among its pairs of adjacent characters, the numbers of pairs\n00\n,\n01\n,\n10\n, and\n11\nare equal.\nThe cost of a binary string is the minimum number of characters that need to be inserted into it so that it becomes cyclically balanced. Characters may be inserted in any positions, including before the first and after the last character of the string. It is not allowed to delete or replace the original characters.\nYou are given a binary string $$$s$$$ and $$$q$$$ queries. In each query, indices $$$l$$$ and $$$r$$$ are given. Find the cost of the substring $$$s_l s_{l+1}\\ldots s_r$$$.",
+  "input": "The first line contains two integers $$$n$$$ and $$$q$$$ ($$$1 \\le n, q \\le 3 \\cdot 10^5$$$) — the length of the string and the number of queries.\nThe second line contains $$$s$$$ — a sequence of length $$$n$$$ consisting of the characters\n0\nand/or\n1\n.\nThen follow $$$q$$$ lines; the $$$i$$$-th of them contains two integers $$$l_i$$$ and $$$r_i$$$ ($$$1 \\le l_i \\le r_i \\le n$$$) — the boundaries of the substring for the corresponding query.",
+  "output": "Print $$$q$$$ integers: the $$$i$$$-th integer should be equal to the cost of the substring from the $$$i$$$-th query.",
+  "examples": [
+    {
+      "input": "11 7001111000001 81 11 21 43 62 77 11",
+      "output": "4\n3\n2\n0\n4\n2\n7"
+    }
+  ],
+  "note": "",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156529",
+    "content": "2260E - Cyclic Balance\nTutorial\nTutorial is loading...\nSolution\n#include<bits/stdc++.h>\n\nusing namespace std;\n\nint get(int c00, int c11, int cd)\n{\nint len = c00 + c11 + cd;\nint lf = len / 4;\nint rg = 1e8;\nint ans = 1e8;\nwhile(rg >= lf)\n{\nint mid = (lf + rg) / 2;\nint need_break = max(0, c00 - mid) + max(0, c11 - mid);\nif(need_break + cd / 2 <= mid)\n{\nans = mid;\nrg = mid - 1;\n}\nelse\nlf = mid + 1;\n}\nreturn ans;\n}\n\nvoid solve()\n{\nint n, q;\ncin >> n >> q;\nstring s;\ncin >> s;\nvector<int> pref1(n + 1), prefdiff(n);\nfor(int i = 0; i < n; i++)\npref1[i + 1] = pref1[i] + (s[i] - '0');\nfor(int i = 0; i + 1 < n; i++)\nprefdiff[i + 1] = prefdiff[i] + (s[i] != s[i + 1]);\n\nfor(int i = 0; i < q; i++)\n{\nint l, r;\ncin >> l >> r;\nif(l == r)\ncout << 3 << \"\\n\";\nelse\n{\nint c1 = pref1[r] - pref1[l - 1];\nint cd = prefdiff[r - 1] - prefdiff[l - 1];\nif(s[l - 1] != s[r - 1])\ncd++;\nint c0 = (r - l + 1) - c1;\nint c00 = c0 - (cd / 2);\nint c11 = c1 - (cd / 2);\ncout << get(c00, c11, cd) * 4 - (r - l + 1) << \"\\n\";\n}\n}\n}\n\nint main()\n{\nios_base::sync_with_stdio(0);\ncin.tie(0);\nint t = 1;\n//cin >> t;\nfor(int i = 0; i < t; i++)\nsolve();\n}",
+    "code_blocks": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nint get(int c00, int c11, int cd)\n{                                      \n    int len = c00 + c11 + cd;\n    int lf = len / 4;\n    int rg = 1e8;\n    int ans = 1e8;\n    while(rg >= lf)\n    {\n        int mid = (lf + rg) / 2;\n        int need_break = max(0, c00 - mid) + max(0, c11 - mid);\n        if(need_break + cd / 2 <= mid)\n        {\n            ans = mid;\n            rg = mid - 1;\n        }\n        else\n            lf = mid + 1;\n    }\n    return ans;\n}\n\nvoid solve()\n{\n    int n, q;\n    cin >> n >> q;\n    string s;\n    cin >> s;\n    vector<int> pref1(n + 1), prefdiff(n);\n    for(int i = 0; i < n; i++)\n        pref1[i + 1] = pref1[i] + (s[i] - '0');\n    for(int i = 0; i + 1 < n; i++)\n        prefdiff[i + 1] = prefdiff[i] + (s[i] != s[i + 1]);\n\n    for(int i = 0; i < q; i++)\n    {\n        int l, r;\n        cin >> l >> r;\n        if(l == r)\n            cout << 3 << \"\\n\";\n        else\n        {\n            int c1 = pref1[r] - pref1[l - 1];\n            int cd = prefdiff[r - 1] - prefdiff[l - 1];\n            if(s[l - 1] != s[r - 1])\n                cd++;\n            int c0 = (r - l + 1) - c1;\n            int c00 = c0 - (cd / 2);\n            int c11 = c1 - (cd / 2);\n            cout << get(c00, c11, cd) * 4 - (r - l + 1) << \"\\n\";\n        }\n    }\n}\n\nint main()\n{\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    int t = 1;\n    //cin >> t;\n    for(int i = 0; i < t; i++)\n        solve();\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:29:20.005178+00:00"
+}

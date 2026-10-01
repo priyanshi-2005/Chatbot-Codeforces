@@ -1,0 +1,36 @@
+{
+  "problem_id": "2262C",
+  "contest_id": "2262",
+  "problem_index": "C",
+  "url": "https://codeforces.com/problemset/problem/2262/C",
+  "tags": [
+    "combinatorics",
+    "constructive algorithms",
+    "graphs",
+    "greedy",
+    "math"
+  ],
+  "rating": 2300,
+  "title": "Traveling the World",
+  "time_limit": "2 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "There are $$$n$$$ islands, numbered from $$$1$$$ to $$$n$$$. The $$$i$$$-th island has value $$$a_i$$$. The values $$$a_1,a_2,\\ldots,a_n$$$ are strictly increasing, and $$$a_1=0$$$.\nFarmer John wants to rearrange the islands. After rearranging them, their values form an array $$$b_1,b_2,\\ldots,b_n$$$, which is a rearrangement of $$$a$$$.\nBessie then travels between islands according to the following rule. Suppose she is currently on the island in position $$$i$$$ after the rearrangement. Then Bessie may travel from the island in position $$$i$$$ to the island in position $$$j$$$ if $$$$$$ b_i + b_j = \\max(b_i,b_{i+1},\\ldots,b_n). $$$$$$\nA rearrangement $$$b$$$ is called good if there exists a sequence of distinct positions $$$p_1,p_2,\\ldots,p_n$$$ such that Bessie can travel from $$$p_i$$$ to $$$p_{i+1}$$$ for every $$$1\\le i \\lt n$$$. In other words, Bessie can visit all positions (and therefore all islands) exactly once by following valid travels.\nCount the number of good rearrangements of the islands. Since the number can be large, output it modulo $$$10^9+7$$$.",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 10^4$$$). The description of the test cases follows.\nThe first line of each test case contains $$$n$$$ ($$$4 \\le n \\le 2 \\cdot 10^5$$$).\nThe second line of each test case contains $$$n$$$ distinct integers $$$a_1,a_2,\\ldots,a_n$$$ ($$$0\\le a_i\\le 10^9$$$).\nIt is guaranteed that $$$a_1=0$$$ and $$$a_1 \\lt a_2 \\lt \\cdots \\lt a_n$$$.\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2\\cdot 10^5$$$.",
+  "output": "For each test case, output a single integer — the number of good rearrangements $$$b$$$ of $$$a$$$, modulo $$$10^9+7$$$.",
+  "examples": [
+    {
+      "input": "360 1 2 3 4 550 3 4 5 640 1 3 4",
+      "output": "1204"
+    }
+  ],
+  "note": "For the first testcase, one $$$b$$$ that works is $$$[2,1,0,5,3,4]$$$.\nNote that Bessie can travel from $$$1 \\to 5$$$ since $$$2 + 3 = b_1 + b_5 = \\max(b_1,b_2,\\ldots,b_6) = 5$$$.\nSimilarly, Bessie can travel from $$$5 \\to 2$$$, $$$2\\to 6$$$, $$$6\\to 3$$$, $$$3\\to 4$$$.\nThus, starting from island $$$1$$$, Bessie can follow the path $$$1\\to 5\\to 2\\to 6\\to 3\\to 4$$$ which visits every island. Therefore, this rearrangement is good.\nFor the second testcase, it can be shown that there are no good rearrangements. Therefore, the answer is $$$0$$$.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156688",
+    "content": "2263E - Traveling the World\n/\n2262C - Traveling the World\nAuthor:\nkondasujay2\nTutorial\nTutorial is loading...\nSolution\n#include <bits/stdc++.h>\nusing namespace std;\n\nusing ll = long long;\n\nconst int MOD = 1e9 + 7;\n\nvoid tc() {\nint n; cin >> n;\nvector<ll> a(n);\nfor(int i = 0; i < n; i++) cin >> a[i];\nint k = n / 2;\n\nint val = 1;\nfor(int i = 1; i <= k; i++) {\nval = (ll)i * val % MOD;\n}\nfor(int i = 1; i <= k - (n % 2 == 0 ? 2 : 1); i++) {\nval = (ll)i * val % MOD;\n}\n\nset<ll> xposs;\nxposs.insert(a[n - 1] - a[n - 2]);\nxposs.insert(a[n - 1] - a[n - 3]);\n\nint ans = 0;\nfor(ll x : xposs) {\nvector<ll> b;\nfor(int i = 0; i < k; i++) {\nb.push_back(i * x);\n}\nfor(int i = 0; i < n - k; i++) {\nb.push_back(a[n - 1] - i * x);\n}\nsort(b.begin(), b.end());\nif(a == b) {\nans += val;\nif(ans >= MOD) ans -= MOD;\n}\n}\ncout << ans << endl;\n}\n\nint main() {\nios::sync_with_stdio(false), cin.tie(nullptr);\nint t; cin >> t;\nwhile(t--) tc();\n}\n\nRate the problem\n\nAmazing:\n\nGood:\n\nOk:\n\nBad:\n\nTerrible:",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nusing ll = long long;\n\nconst int MOD = 1e9 + 7;\n\nvoid tc() {\n    int n; cin >> n;\n    vector<ll> a(n);\n    for(int i = 0; i < n; i++) cin >> a[i];\n    int k = n / 2;\n\n    int val = 1;\n    for(int i = 1; i <= k; i++) {\n        val = (ll)i * val % MOD;\n    }\n    for(int i = 1; i <= k - (n % 2 == 0 ? 2 : 1); i++) {\n        val = (ll)i * val % MOD;\n    }\n\n    set<ll> xposs;\n    xposs.insert(a[n - 1] - a[n - 2]);\n    xposs.insert(a[n - 1] - a[n - 3]);\n\n    int ans = 0;\n    for(ll x : xposs) {\n        vector<ll> b;\n        for(int i = 0; i < k; i++) {\n            b.push_back(i * x);\n        }\n        for(int i = 0; i < n - k; i++) {\n            b.push_back(a[n - 1] - i * x);\n        }\n        sort(b.begin(), b.end());\n        if(a == b) {\n            ans += val;\n            if(ans >= MOD) ans -= MOD;\n        }\n    }\n    cout << ans << endl;\n}\n\nint main() {\n    ios::sync_with_stdio(false), cin.tie(nullptr);\n    int t; cin >> t;\n    while(t--) tc();\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:29:05.188600+00:00"
+}

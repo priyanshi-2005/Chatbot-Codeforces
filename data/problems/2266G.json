@@ -1,0 +1,37 @@
+{
+  "problem_id": "2266G",
+  "contest_id": "2266",
+  "problem_index": "G",
+  "url": "https://codeforces.com/problemset/problem/2266/G",
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "math",
+    "number theory",
+    "trees"
+  ],
+  "rating": null,
+  "title": "Modular Tree",
+  "time_limit": "3 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "Vihaan has a rooted tree$$$^{\\text{∗}}$$$ with $$$n$$$ nodes. The tree is rooted at node $$$1$$$.\nEach node $$$i$$$ has an initial value $$$a_i$$$ and a modulus $$$b_i$$$. Let $$$x_i$$$ denote the\ncurrent\nvalue of node $$$i$$$. Initially, $$$x_i=a_i$$$.\nVihaan may perform the following operation any number of times:\n\nChoose a node $$$u$$$. Let $$$s$$$ be the sum of the\ncurrent\nvalues of all direct children of $$$u$$$, then replace $$$x_u$$$ with $$$(x_u+s)\\bmod b_u$$$.\nAfter performing any number of operations, Vihaan wants to maximize the sum of the values of all nodes.\nDetermine the maximum possible sum.\n$$$^{\\text{∗}}$$$A tree is an undirected connected graph in which there are no cycles.",
+  "input": "The first line contains an integer $$$t$$$ ($$$1 \\le t \\le 10^4$$$) — the number of test cases.\nThe first line of each test case contains an integer $$$n$$$ ($$$1 \\le n \\le 2 \\cdot 10^5$$$) — the number of nodes in the tree.\nThe second line contains $$$n$$$ integers $$$a_1,a_2,\\ldots,a_n$$$ ($$$0 \\le a_i \\lt b_i$$$) — the initial values of the nodes.\nThe third line contains $$$n$$$ integers $$$b_1,b_2,\\ldots,b_n$$$ ($$$1 \\le b_i \\le 10^9$$$) — the moduli of the nodes.\nEach of the next $$$n-1$$$ lines contains two integers $$$u$$$ and $$$v$$$ ($$$1 \\le u,v \\le n$$$) — an edge between nodes $$$u$$$ and $$$v$$$.\nIt is guaranteed that the given edges form a tree.\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2 \\cdot 10^5$$$.",
+  "output": "For each test case, print one integer — the maximum possible sum of the values of all nodes after performing any number of operations.",
+  "examples": [
+    {
+      "input": "813720 35 41 230 2 37 3 41 22 330 0 15 2 21 22 341 2 3 410 3 4 51 21 31 430 1 310 2 41 21 350 0 1 2 312 6 9 3 41 21 32 43 540 999999999 999999999 9999999991000000000 1000000000 1000000000 10000000001 21 31 4",
+      "output": "371161812273999999996"
+    }
+  ],
+  "note": "In the first test case, node $$$1$$$ has no children, so performing an operation on it does not change its value. Thus, the maximum possible sum is $$$3$$$.\nIn the third test case, Vihaan can perform the operation on node $$$1$$$ three times:\n\n$$$[0,2,3] \\to [2,2,3]$$$.\n$$$[2,2,3] \\to [4,2,3]$$$.\n$$$[4,2,3] \\to [6,2,3]$$$.\nThe resulting sum is $$$6+2+3=11$$$. It can be shown that no sequence of operations can obtain a larger sum.\nIn the fourth test case, Vihaan can perform the following operations:\n\nPerform the operation on node $$$2$$$: $$$$$$[0,0,1] \\to [0,1,1].$$$$$$\nPerform the operation on node $$$1$$$ four times: $$$$$$[0,1,1] \\to [1,1,1] \\to [2,1,1] \\to [3,1,1] \\to [4,1,1].$$$$$$\nThe resulting sum is $$$4+1+1=6$$$. It can be shown that no sequence of operations can obtain a larger sum.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156984",
+    "content": "2266G - Modular Tree\nHint 1\nProcess the tree from the leaves upward.\nHint 2\nA node can always be brought back to its original value after changing it.\nHint 3\nFor every node $$$i$$$, its reachable values have the form $$$(a_i+g_ix)\\bmod b_i$$$ for some integer $$$x$$$. Find $$$g_i$$$.\nSolution\nFor every node $$$u$$$, let $$$g_u$$$ be such that its reachable values are exactly $$$(a_u+g_ux)\\bmod b_u$$$. We compute $$$g_u$$$ from the leaves upward.\nSuppose $$$v$$$ is a child of $$$u$$$. If $$$g_v=b_v$$$, then $$$v$$$ is fixed at $$$a_v$$$. Otherwise, its value can change from $$$a_v$$$ by multiples of $$$g_v$$$. Let $$$S_u$$$ be the sum of the initial values of all direct children of $$$u$$$. We can add $$$S_u$$$ to $$$u$$$ by leaving all children at their initial values, and every non-fixed child $$$v$$$ lets us vary this amount by multiples of $$$g_v$$$. Therefore, $$$g_u=\\gcd(b_u,S_u,g_v\\text{ for all non-fixed children }v)$$$.\nFor a leaf, this gives $$$g_u=b_u$$$, as expected. Once we know $$$g_u$$$, the largest reachable value is $$$a_u+\\left\\lfloor\\frac{b_u-1-a_u}{g_u}\\right\\rfloor g_u$$$.\nThese maxima can all be achieved together. We can first set a node to its maximum, then continue working strictly inside its children's subtrees without changing that node. So after computing all $$$g_u$$$ bottom-up, we simply sum the maximum reachable value of every node.\nThe complexity is $$$O(n\\log 10^9)$$$ per test case.\nCode (C++)\n#include <bits/stdc++.h>\nusing namespace std;\n\nvoid dfs(long long node, long long par, vector<long long> &A, vector<long long> &B, vector<long long> &g, vector<vector<long long>> &adj) {\nlong long gc = 0;\nlong long tt = 0;\nfor (auto x : adj[node]) {\nif (x != par) {\ndfs(x,node,A,B,g,adj);\nif (g[x]!=B[x]) {gc=gcd(gc,g[x]);}\ntt+=A[x];\n}\n}\ngc=gcd(gc,tt);\ngc=gcd(gc,B[node]);\ng[node]=gc;\n}\n\nvoid solve() {\nlong long N; cin >> N;\nvector<long long> A; A.push_back(-1);\nvector<long long> B; B.push_back(-1);\nvector<vector<long long>> adj(N+1);\nfor (long long i = 0; i < N; i++) {\nlong long a; cin >> a;\nA.push_back(a);\n}\nfor (long long i = 0; i < N; i++) {\nlong long a; cin >> a;\nB.push_back(a);\n}\nfor (long long i = 0; i < N-1; i++) {\nlong long a, b; cin >> a >> b;\nadj[a].push_back(b);\nadj[b].push_back(a);\n}\nvector<long long> g(N+1); //init to 0 for identity gcd\ndfs(1,0,A,B,g,adj);\nlong long aa = 0;\nfor (long long i = 1; i <= N; i++) {aa+=((B[i]-A[i]-1)/g[i])*g[i]+A[i];}\ncout << aa << endl;\n}\n\nint main() {\nlong long T; cin >> T;\nwhile (T--) {solve();}\n}\n\nRate the problem!\nDifficulty\n\nTrivial problem\n\nEasy problem\n\nAverage problem\n\nHard problem\n\nImpossible problem\n\nQuality\n\nExcellent problem\n\nGood problem\n\nAverage problem\n\nBad problem\n\nHorrible problem",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid dfs(long long node, long long par, vector<long long> &A, vector<long long> &B, vector<long long> &g, vector<vector<long long>> &adj) {\n    long long gc = 0;\n    long long tt = 0;\n    for (auto x : adj[node]) {\n        if (x != par) {\n            dfs(x,node,A,B,g,adj);\n            if (g[x]!=B[x]) {gc=gcd(gc,g[x]);}\n            tt+=A[x];\n        }\n    }\n    gc=gcd(gc,tt);\n    gc=gcd(gc,B[node]);\n    g[node]=gc;\n}\n\nvoid solve() {\n    long long N; cin >> N;\n    vector<long long> A; A.push_back(-1);\n    vector<long long> B; B.push_back(-1);\n    vector<vector<long long>> adj(N+1);\n    for (long long i = 0; i < N; i++) {\n        long long a; cin >> a;\n        A.push_back(a);\n    }\n    for (long long i = 0; i < N; i++) {\n        long long a; cin >> a;\n        B.push_back(a);\n    }\n    for (long long i = 0; i < N-1; i++) {\n        long long a, b; cin >> a >> b;\n        adj[a].push_back(b);\n        adj[b].push_back(a);\n    }\n    vector<long long> g(N+1); //init to 0 for identity gcd\n    dfs(1,0,A,B,g,adj);\n    long long aa = 0;\n    for (long long i = 1; i <= N; i++) {aa+=((B[i]-A[i]-1)/g[i])*g[i]+A[i];}\n    cout << aa << endl;\n}\n\nint main() {\n    long long T; cin >> T;\n    while (T--) {solve();}\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:20.636631+00:00"
+}

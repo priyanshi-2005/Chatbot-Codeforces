@@ -1,0 +1,33 @@
+{
+  "problem_id": "2269A",
+  "contest_id": "2269",
+  "problem_index": "A",
+  "url": "https://codeforces.com/problemset/problem/2269/A",
+  "tags": [
+    "greedy",
+    "math"
+  ],
+  "rating": null,
+  "title": "SauSaGe Bank",
+  "time_limit": "1 second",
+  "memory_limit": "256 megabytes",
+  "description": "Everyone in SauSaGe City is talking about its famous bank that offers a seemingly impossible deal:\n\"Leave your money with us, and we'll double it every single day!\"\nHamed decides to give it a try, so he deposits $$$1$$$ dollar into his account.\nSuppose that at the beginning of a day, his bank balance is $$$x$$$ dollars. Every day, the following events happen in order:\n\nIn the morning, the bank magically doubles his balance, so it becomes $$$2x$$$ dollars.\nAt night, Hamed may choose to withdraw all of the money from his bank account. If he does, the withdrawn amount is added to his card, and his bank account is immediately reset to $$$1$$$ dollar so that the doubling process can begin again the next day. Otherwise, he leaves the money in the bank.\nUnfortunately, this incredible bank will remain open for exactly $$$n$$$ days before shutting down forever.\nHamed wants to withdraw money on exactly $$$k$$$ different days before the bank closes. Determine the maximum amount of money that can be on Hamed's card after the $$$n$$$-th day.",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 500$$$). The description of the test cases follows.\nThe only line of each test case contains the two integers $$$n$$$ and $$$k$$$ ($$$1\\le k\\le n\\le30$$$).",
+  "output": "For each test case, print a single integer — the maximum amount of money that can be on Hamed's card after the $$$n$$$-th day.",
+  "examples": [
+    {
+      "input": "51 12 14 35 510 2",
+      "output": "24810514"
+    }
+  ],
+  "note": "In the first test case, his bank balance becomes $$$2$$$ on the first day, and he chooses to withdraw it.\nIn the second test case, he can withdraw his money on the $$$2$$$-nd day.\nIn the third test case, he can withdraw his money on the $$$1$$$-st, $$$3$$$-rd, and $$$4$$$-th days. He receives $$$2$$$, $$$4$$$, and $$$2$$$, respectively.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/157140",
+    "content": "2269A - SauSaGe Bank\n\nIdea:\n\nHamed_Ghaffari\n\nPreparation:\n\nHamed_Ghaffari\nHints\nHint 1\nIf Hamed waits $$$d$$$ days before withdrawing, the amount of money in his card increases by exactly $$$2^d$$$.\n\nHint 2\nFor fixed $$$a+b$$$, is $$$2^a+2^b$$$ larger when $$$a,b$$$ are close together, or when one is as large as possible?\nSolution\nIf Hamed waits $$$d$$$ days before withdrawing, the amount of money in his card increases by exactly $$$2^d$$$.\nTherefore the problem becomes: Split $$$n$$$ into exactly $$$k$$$ positive integers $$$a_1,\\dots,a_k$$$, and maximize\n\n$$$2^{a_1}+2^{a_2}+...+2^{a_k}$$$\nFor fixed $$$a+b$$$, $$$2^a+2^b$$$ is larger when one of them is as large as possible.\n\nProof\nSuppose two segment lengths are $$$a\\le b$$$, with $$$a \\gt 1$$$. Move one day from the smaller segment to the larger one:\n\n$$$(a,b) \\to (a-1,b+1)$$$\nCompare the contributions:\n\n$$$2^{a-1} + 2^{b+1} - (2^a + 2^b) = 2^b - 2^{a-1} \\gt 0$$$\nSo this change always increases the answer.\nHence, in an optimal solution, we cannot have two segments with length greater than $$$1$$$. We keep transferring days from smaller segments to the largest one until all but one segment have length $$$1$$$.\nThus the optimal lengths are\n\n$$$n-k+1,\\underbrace{1,1,\\ldots,1}_{k-1\\text{ times}}$$$\nSo the maximum amount is $$$2^{n-k+1}+2(k-1)$$$\nCode\n#include <bits/stdc++.h>\nusing namespace std;\nint main() {\ncin.tie(0); cout.tie(0); ios_base::sync_with_stdio(0);\nint tc;\ncin >> tc;\nwhile(tc--) {\nint n, k;\ncin >> n >> k;\ncout << (1<<(n-k+1)) + 2*(k-1) << '\\n';\n}\nreturn 0;\n}",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nint main() {\n    cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(0);\n    int tc;\n    cin >> tc;\n    while(tc--) {\n        int n, k;\n        cin >> n >> k;\n        cout << (1<<(n-k+1)) + 2*(k-1) << '\\n';\n    }\n    return 0;\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:27:41.608822+00:00"
+}

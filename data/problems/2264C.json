@@ -1,0 +1,34 @@
+{
+  "problem_id": "2264C",
+  "contest_id": "2264",
+  "problem_index": "C",
+  "url": "https://codeforces.com/problemset/problem/2264/C",
+  "tags": [
+    "combinatorics",
+    "math",
+    "sortings"
+  ],
+  "rating": 1400,
+  "title": "Madamant's Skating Dynasty",
+  "time_limit": "2 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "Madam Madamant is expecting a baby and already planning a skating dynasty in which every parent is a stronger skater than their children.\nFormally, Madamant has $$$n$$$ labeled skaters. Skater $$$v$$$ has an integer rating $$$a_v$$$, and all ratings are pairwise distinct. A possible dynasty is represented by a rooted tree on these skaters.\nLet $$$r$$$ be the root of the tree. For every skater $$$v \\ne r$$$, let $$$p_v$$$ be the parent of $$$v$$$. The dynasty is\nvalid\nif $$$a_v \\lt a_{p_v}$$$ for every $$$v \\ne r$$$.\nThe cost of a valid dynasty is $$$$$$ \\sum_{v \\ne r} (a_{p_v} - a_v). $$$$$$\nTwo dynasties are different if their roots are different or if the parent of at least one skater is different.\nFind the sum of the costs of all valid dynasties Madamant can form, modulo $$$998\\,244\\,353$$$.",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 10^4$$$). The description of the test cases follows.\nThe first line of each test case contains a single integer $$$n$$$ ($$$1 \\le n \\le 2 \\cdot 10^5$$$) — the number of skaters.\nThe second line contains $$$n$$$ integers $$$a_1, a_2, \\ldots, a_n$$$ ($$$1 \\le a_i \\le 10^9$$$) — their ratings.\nIt is guaranteed that all $$$a_i$$$ are pairwise distinct.\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2 \\cdot 10^5$$$.",
+  "output": "For each test case, print one integer — the sum of the costs of all valid dynasties, modulo $$$998\\,244\\,353$$$.",
+  "examples": [
+    {
+      "input": "511031 2 344 1 3 221 100000000052 7 1 10 4",
+      "output": "05271755646414"
+    }
+  ],
+  "note": "In the second test case, the skater with rating $$$3$$$ must be the root. The parent of the skater with rating $$$2$$$ must be the skater with rating $$$3$$$, while the skater with rating $$$1$$$ can choose either of the other skaters as their parent. The two valid dynasties have costs $$$2$$$ and $$$3$$$, so the answer is $$$5$$$.\nIn the fourth test case, there is only one valid dynasty. Its cost is $$$10^9 - 1 = 999\\,999\\,999$$$, whose remainder modulo $$$998\\,244\\,353$$$ is $$$1\\,755\\,646$$$.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156680",
+    "content": "2264C - Madamant's Skating Dynasty\nProblem by\nqwexd\n.\nHint 1\nAfter sorting, every parent lies to the right of their child. What does that imply about cycles and the root?\nHint 2\nThe total cost is a sum of edge costs. Fix one possible edge; how many choices remain for the other children?\nSolution\nSort the ratings:\n\n$$$ b_0 \\lt b_1 \\lt \\cdots \\lt b_{n-1}. $$$\nThe maximum is forced to be the root. Give every other position $$$i$$$ any parent $$$j \\gt i$$$. Following parent links always moves right, so there is no cycle and every path ends at the maximum. Thus any such choices form a valid tree.\nWe cannot enumerate the trees. Instead, consider one possible edge at a time and add its cost once for every tree containing it.\nFix the edge from child $$$i$$$ to parent $$$j \\gt i$$$. Its cost is $$$b_j-b_i$$$. Every other child $$$k$$$ still has $$$n-k-1$$$ choices, so this edge appears in\n\n$$$ W_i=\\prod\\limits_{\\substack{0\\le k \\lt n-1\\\\k\\ne i}}(n-k-1) $$$\ntrees. The value $$$W_i$$$ does not depend on $$$j$$$, so all edges leaving $$$i$$$ contribute\n\n$$$ W_i\\sum\\limits_{j=i+1}^{n-1}(b_j-b_i) =W_i\\left(\\sum\\limits_{j=i+1}^{n-1}b_j\\right) - W_i (n-i-1)b_i. $$$\nA suffix sum gives the sum of ratings to the right of each $$$i$$$. Prefix and suffix products of the numbers $$$n-k-1$$$ give every $$$W_i$$$ without division.\nThe complexity is $$$O(n\\log n)$$$ time and $$$O(n)$$$ memory.\nCode (GNU C++17)\n#include <bits/stdc++.h>\n\nusing namespace std;\n\nusing ll = long long;\n\nconst int MOD = 998244353;\n\nint main() {\nios::sync_with_stdio(false);\ncin.tie(nullptr);\n\nint t;\ncin >> t;\nwhile (t--) {\nint n;\ncin >> n;\nvector<ll> b(n);\nfor (ll &x : b) cin >> x;\nsort(b.begin(), b.end());\n\nvector<ll> sum(n + 1);\nfor (int i = n - 1; i >= 0; --i) {\nsum[i] = sum[i + 1] + b[i];\n}\n\nvector<ll> pref(n, 1), suff(n, 1);\nfor (int i = 0; i < n - 1; ++i) {\npref[i + 1] = pref[i] * (n - i - 1) % MOD;\n}\nfor (int i = n - 2; i >= 0; --i) {\nsuff[i] = suff[i + 1] * (n - i - 1) % MOD;\n}\n\nll ans = 0;\nfor (int i = 0; i < n - 1; ++i) {\nll diff = sum[i + 1] - (n - i - 1) * b[i];\nll ways = pref[i] * suff[i + 1] % MOD;\nans = (ans + diff % MOD * ways) % MOD;\n}\ncout << ans << '\\n';\n}\n}",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nusing ll = long long;\n\nconst int MOD = 998244353;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int t;\n    cin >> t;\n    while (t--) {\n        int n;\n        cin >> n;\n        vector<ll> b(n);\n        for (ll &x : b) cin >> x;\n        sort(b.begin(), b.end());\n\n        vector<ll> sum(n + 1);\n        for (int i = n - 1; i >= 0; --i) {\n            sum[i] = sum[i + 1] + b[i];\n        }\n\n        vector<ll> pref(n, 1), suff(n, 1);\n        for (int i = 0; i < n - 1; ++i) {\n            pref[i + 1] = pref[i] * (n - i - 1) % MOD;\n        }\n        for (int i = n - 2; i >= 0; --i) {\n            suff[i] = suff[i + 1] * (n - i - 1) % MOD;\n        }\n\n        ll ans = 0;\n        for (int i = 0; i < n - 1; ++i) {\n            ll diff = sum[i + 1] - (n - i - 1) * b[i];\n            ll ways = pref[i] * suff[i + 1] % MOD;\n            ans = (ans + diff % MOD * ways) % MOD;\n        }\n        cout << ans << '\\n';\n    }\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:45.791367+00:00"
+}

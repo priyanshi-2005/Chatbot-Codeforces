@@ -1,0 +1,35 @@
+{
+  "problem_id": "2267F1",
+  "contest_id": "2267",
+  "problem_index": "F1",
+  "url": "https://codeforces.com/problemset/problem/2267/F1",
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "implementation",
+    "sortings"
+  ],
+  "rating": null,
+  "title": "XOR Transformations (Easy Version)",
+  "time_limit": "4 seconds",
+  "memory_limit": "512 megabytes",
+  "description": "This is the easy version of the problem. The difference between the versions is that in this version, the constraints on $$$n$$$ and $$$q$$$ are smaller. You can make hacks only if you have solved all versions of this problem.\nFor an array $$$b$$$ consisting of $$$m$$$ integers, define a\ntransformation\nas follows:\n\nWrite down the values $$$b_i\\oplus b_j$$$ for all $$$1\\le i\\lt j\\le m$$$, where $$$\\oplus$$$ denotes the\nbitwise XOR operation\n..\nTake the $$$m$$$ smallest among the written values.\nReplace the elements of the array with the taken $$$m$$$ values.\nFor example, consider the\ntransformation\nof the array $$$[6, 7, 8, 9, 15]$$$. We write down the values $$$1, 1, 6, 7, 8, 9, 14, 14, 15, 15$$$. After the\ntransformation\n, the array becomes $$$[1, 1, 6, 7, 8]$$$ — the $$$5$$$ smallest elements.\nYou are given an array $$$a$$$ consisting of $$$n$$$ non-negative integers. Let $$$\\max(a)$$$ denote the maximum element of the array $$$a$$$, and $$$\\min(a)$$$ — the minimum. Your task is to answer $$$q$$$ queries, each of which gives you one integer $$$x$$$. For each query, find the value of $$$\\max(a) - \\min(a)$$$ after $$$x$$$ transformations on the array. Note that the queries are independent, i.e. before each query, the array $$$a$$$ is restored to its original state.",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 100$$$). The description of the test cases follows.\nThe first line of each test case contains two integers $$$n$$$ and $$$q$$$ ($$$5\\le n\\le 2000, 1\\le q\\le 2000$$$) — the size of the array and the number of queries.\nThe second line of each test case contains $$$n$$$ integers $$$a_1, a_2, \\ldots, a_n$$$ ($$$0\\le a_i\\lt 2^{30}$$$).\nThe next $$$q$$$ lines of each test case contain an integer $$$x$$$ ($$$0\\le x\\lt 2^{30}$$$).\nIt is guaranteed that the sum of $$$n$$$ and the sum of $$$q$$$ over all test cases do not exceed $$$2000$$$.",
+  "output": "For each test case, output $$$q$$$ integers — the answer to each query.",
+  "examples": [
+    {
+      "input": "45 10 0 1 1 115 26 7 8 9 15018 2102 92 15 19 25 54 62 362110 156 73 81 23 17 92 50 34 67 782",
+      "output": "19712317"
+    }
+  ],
+  "note": "In the first test case, after one\ntransformation\n, the array becomes $$$[0, 0, 0, 0, 1]$$$. Here $$$\\max(a) - \\min(a) = 1 - 0 = 1$$$.\nIn the second test case, the initial array is $$$[6, 7, 8, 9, 15]$$$. Initially, $$$\\max(a) - \\min(a) = 15 - 6 = 9$$$. After the\ntransformation\n, the array becomes $$$[1, 1, 6, 7, 8]$$$, where $$$\\max(a) - \\min(a) = 8 - 1 = 7$$$.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/157126",
+    "content": "2267F1 - XOR Transformations (Easy Version)\n\nIdea:\nKluydQ\n\nSolution + Editorial:\nKluydQ\n\nSolution\nTutorial is loading...\nImplementation\n#include <bits/stdc++.h>\n\nusing namespace std;\n\nconst int N = 2048;\nint n, m, tim, a[N], cnt[N], ans[N];\n\nvoid transform()\n{\nvector <int> v;\n\nfor(int i = 1; i <= n; i ++)\n{\nfor(int j = i + 1; j <= n; j ++)\n{\nv.push_back(a[i] ^ a[j]);\n}\n}\nsort(v.begin(), v.end());\nfor(int i = 1; i <= n; i ++) a[i] = v[i - 1];\n}\nvoid solve()\n{\ncin >> n >> m;\n\nfor(int i = 1; i <= n; i ++)\n{\ncin >> a[i];\n}\nsort(a + 1, a + n + 1);\nint lim = 0;\n\nans[lim] = a[n] - a[1];\n\nwhile(a[n] != 0)\n{\nlim ++, transform();\nans[lim] = a[n] - a[1];\n}\nfor(int i = 1; i <= m; i ++)\n{\nint x;\ncin >> x;\n\nif(x >= lim) cout << ans[lim] << '\\n';\nelse cout << ans[x] << '\\n';\n}\n}\nsigned main()\n{\nios_base::sync_with_stdio(0), cin.tie(0);\n\nint test = 0;\nif(!test) cin >> test;\nwhile(test --) solve();\n}\n\nDid you like the problem?\n\nGreat problem\n\nGood problem\n\nBad problem\n\nDidn't solve",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nconst int N = 2048;\nint n, m, tim, a[N], cnt[N], ans[N];\n\nvoid transform()\n{\n\tvector <int> v;\n\t\n\tfor(int i = 1; i <= n; i ++)\n\t{\n\t\tfor(int j = i + 1; j <= n; j ++)\n\t\t{\n\t\t\tv.push_back(a[i] ^ a[j]);\n\t\t}\n\t}\n\tsort(v.begin(), v.end());\n\tfor(int i = 1; i <= n; i ++) a[i] = v[i - 1];\n}\nvoid solve()\n{\n\tcin >> n >> m;\n\t\n\tfor(int i = 1; i <= n; i ++)\n\t{\n\t\tcin >> a[i];\n\t}\n\tsort(a + 1, a + n + 1);\n\tint lim = 0;\n\t\n\tans[lim] = a[n] - a[1];\n\t\t\n\twhile(a[n] != 0)\n\t{\n\t\tlim ++, transform();\n\t\tans[lim] = a[n] - a[1];\n\t}\n\tfor(int i = 1; i <= m; i ++)\n\t{\n\t\tint x;\n\t\tcin >> x;\n\t\t\n\t\tif(x >= lim) cout << ans[lim] << '\\n';\n\t\telse cout << ans[x] << '\\n';\n\t}\n}\nsigned main()\n{\n\tios_base::sync_with_stdio(0), cin.tie(0);\n\t\n\tint test = 0;\n\tif(!test) cin >> test;\n\twhile(test --) solve();\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:02.801135+00:00"
+}

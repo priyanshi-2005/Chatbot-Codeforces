@@ -1,0 +1,33 @@
+{
+  "problem_id": "2266C",
+  "contest_id": "2266",
+  "problem_index": "C",
+  "url": "https://codeforces.com/problemset/problem/2266/C",
+  "tags": [
+    "greedy",
+    "strings"
+  ],
+  "rating": null,
+  "title": "AND, OR, Sort!",
+  "time_limit": "2 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "You are given a\nbinary string\n$$$^{\\text{∗}}$$$ $$$s$$$ of length $$$n$$$.\nYou may perform the following operation any number of times (possibly zero):\n\nchoose an integer $$$i$$$ ($$$1 \\le i \\le n$$$), and replace $$$s_i$$$ with either the\nbitwise AND\nor the\nbitwise OR\nof $$$s_1, s_2, \\ldots, s_i$$$.\nNote that the bitwise AND or bitwise OR of a single element is equal to the element itself.\nYour goal is to make $$$s$$$ sorted in non-decreasing order$$$^{\\text{†}}$$$.\nFind the minimum number of operations required to sort $$$s$$$ in non-decreasing order.\n$$$^{\\text{∗}}$$$A binary string only contains characters $$$\\texttt{0}$$$ and $$$\\texttt{1}$$$.\n$$$^{\\text{†}}$$$If $$$s$$$ is in non-decreasing order, then $$$s_1 \\leq s_2 \\leq \\ldots \\leq s_n$$$.",
+  "input": "The first line contains a single integer $$$t$$$ ($$$1 \\le t \\le 10^4$$$) — the number of test cases.\nThe first line of each test case contains a single integer $$$n$$$ ($$$2 \\le n \\le 2 \\cdot 10^5$$$) — the length of the binary string $$$s$$$.\nThe second line of each test case contains the binary string $$$s$$$ of length $$$n$$$. Each character of $$$s$$$ is either\n0\nor\n1\n.\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$2 \\cdot 10^5$$$.",
+  "output": "For each test case, print a single integer — the minimum number of operations required to sort $$$s$$$ in non-decreasing order.",
+  "examples": [
+    {
+      "input": "640011410005010008010011017010101070111101",
+      "output": "031231"
+    }
+  ],
+  "note": "In the first test case, the string is already sorted, so no operations are required.\nIn the second test case, we can use bitwise OR to change the last three characters to\n1\n, obtaining\n1111\nin $$$3$$$ operations.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156984",
+    "content": "2266C - AND, OR, Sort!\nHint 1\nIf a prefix contains both $$$0$$$ and $$$1$$$, what are its bitwise AND and bitwise OR?\nHint 2\nA sorted binary string is determined by one split point.\nSolution\nIf a prefix contains both $$$0$$$ and $$$1$$$, its AND is $$$0$$$ and its OR is $$$1$$$, so its last character can be changed to either value.\nIf $$$s_1=1$$$, the first character can never change, so the final string must be all ones. Every zero can be changed using OR, giving the number of zeros as the answer.\nNow suppose $$$s_1=0$$$. Fix the point after which the ones start. For a split after $$$i$$$, we need to change every one in $$$[1,i]$$$ and every zero in $$$[i+1,n]$$$. We can first change the required zeros on the right using OR, then change the required ones on the left using AND. A split inside the initial block of zeros is never better than moving it to the end of that block.\nSo, scan every split while maintaining the number of ones on the left and zeros on the right, and take the minimum.\nThe complexity is $$$O(n)$$$ per test case.\nCode (C++)\n#include <bits/stdc++.h>\nusing namespace std;\n\nvoid solve() {\nint N; cin >> N;\nstring s; cin >> s;\nint z = 0;\nint o = 0;\nfor (int i = 0; i < N; i++) {z+=(s[i]=='0');}\nif (s[0]=='1') {cout << z << endl; return;}\nint aa = 1e9;\nfor (int i = 0; i < N; i++) {\no+=(s[i]=='1');\nz-=(s[i]=='0');\naa=min(aa,o+z);\n}\ncout << aa << endl;\n}\n\nint main() {\nint T; cin >> T;\nwhile (T--) {solve();}\n}\n\nRate the problem!\nDifficulty\n\nTrivial problem\n\nEasy problem\n\nAverage problem\n\nHard problem\n\nImpossible problem\n\nQuality\n\nExcellent problem\n\nGood problem\n\nAverage problem\n\nBad problem\n\nHorrible problem",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid solve() {\n    int N; cin >> N;\n    string s; cin >> s;\n    int z = 0;\n    int o = 0;\n    for (int i = 0; i < N; i++) {z+=(s[i]=='0');}\n    if (s[0]=='1') {cout << z << endl; return;}\n    int aa = 1e9;\n    for (int i = 0; i < N; i++) {\n        o+=(s[i]=='1');\n        z-=(s[i]=='0');\n        aa=min(aa,o+z);\n    }\n    cout << aa << endl;\n}\n\nint main() {\n    int T; cin >> T;\n    while (T--) {solve();}\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:29.017680+00:00"
+}

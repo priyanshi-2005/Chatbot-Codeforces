@@ -1,0 +1,32 @@
+{
+  "problem_id": "2263A",
+  "contest_id": "2263",
+  "problem_index": "A",
+  "url": "https://codeforces.com/problemset/problem/2263/A",
+  "tags": [
+    "games"
+  ],
+  "rating": 800,
+  "title": "Min Max Game",
+  "time_limit": "1 second",
+  "memory_limit": "256 megabytes",
+  "description": "Bessie and Elsie are playing a game on a binary array $$$a$$$ of length $$$n$$$.\nThe players alternate turns, with Bessie moving first. On Bessie's turn, she chooses two adjacent elements $$$x$$$ and $$$y$$$ and replaces them with the single value $$$\\max(x,y)$$$.\nOn Elsie's turn, she chooses two adjacent elements $$$x$$$ and $$$y$$$ and replaces them with the single value $$$\\min(x,y)$$$.\nAfter each move, the length of the array decreases by $$$1$$$. The game ends when only one element remains. Bessie wins if the final element is $$$1$$$, and Elsie wins if the final element is $$$0$$$.\nAssuming both players play optimally, determine who wins.",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 500$$$). The description of the test cases follows.\nThe first line of each test case contains a single integer $$$n$$$ ($$$2 \\leq n \\leq 100$$$).\nThe second line of each test case contains $$$n$$$ integers $$$a_1, a_2, \\ldots, a_n$$$ ($$$0 \\leq a_i \\leq 1$$$).",
+  "output": "For each test case, you should output the name of who wins on a new line.",
+  "examples": [
+    {
+      "input": "351 0 1 0 130 0 141 1 0 0",
+      "output": "BessieElsieBessie"
+    }
+  ],
+  "note": "For the first test case, Bessie can guarantee a win. One possible game is as follows: $$$$$$ [\\color{red}{1},\\color{red}{0},1,0,1] \\to [1,\\color{red}{1},\\color{red}{0},1] \\to [\\color{red}{1},\\color{red}{0},1] \\to [\\color{red}{1},\\color{red}{1}] \\to [1]. $$$$$$ The final value is $$$1$$$, so Bessie wins (the red highlight denotes the two adjacent elements picked on that turn).\nFor the second test case, no matter which move Bessie makes, Elsie can make the final value $$$0$$$. Therefore, Elsie wins.\nFor the third test case, one possible winning game for Bessie is: $$$$$$ [1,\\color{red}{1},\\color{red}{0},0] \\to [1,\\color{red}{1},\\color{red}{0}] \\to [\\color{red}{1},\\color{red}{0}] \\to [1]. $$$$$$ The final value is $$$1$$$, so Bessie wins.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156688",
+    "content": "2263A - Min Max Game\nAuthor:\nkondasujay2\nTutorial\nTutorial is loading...\nSolution\n#include <bits/stdc++.h>\nusing namespace std;\n\nvoid tc() {\nint n; cin >> n;\nint cnt = 0;\nvector<int> a(n);\nfor(int i = 0; i < n; i++) {\ncin >> a[i];\ncnt += a[i];\n}\nif(cnt >= n - cnt) {\ncout << \"Bessie\\n\";\n} else {\ncout << \"Elsie\\n\";\n}\n}\n\nint main() {\nios::sync_with_stdio(false), cin.tie(nullptr);\nint t; cin >> t;\nwhile(t--) tc();\n}\n\nRate the problem\n\nAmazing:\n\nGood:\n\nOk:\n\nBad:\n\nTerrible:",
+    "code_blocks": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid tc() {\n    int n; cin >> n;\n    int cnt = 0;\n    vector<int> a(n);\n    for(int i = 0; i < n; i++) {\n        cin >> a[i];\n        cnt += a[i];\n    }\n    if(cnt >= n - cnt) {\n        cout << \"Bessie\\n\";\n    } else {\n        cout << \"Elsie\\n\";\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false), cin.tie(nullptr);\n    int t; cin >> t;\n    while(t--) tc();\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:56.797369+00:00"
+}

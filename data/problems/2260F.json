@@ -1,0 +1,36 @@
+{
+  "problem_id": "2260F",
+  "contest_id": "2260",
+  "problem_index": "F",
+  "url": "https://codeforces.com/problemset/problem/2260/F",
+  "tags": [
+    "brute force",
+    "dfs and similar",
+    "dsu",
+    "graphs",
+    "trees"
+  ],
+  "rating": 2500,
+  "title": "Edge Three-Coloring",
+  "time_limit": "4 seconds",
+  "memory_limit": "512 megabytes",
+  "description": "You are given an undirected connected graph with $$$n$$$ vertices and $$$m$$$ edges, where $$$m \\le n + 9$$$.\nEach edge of the graph must be colored with one of three colors numbered from $$$1$$$ to $$$3$$$. We say that vertices $$$u$$$ and $$$v$$$ are reachable in color $$$c$$$ if there exists a path from $$$u$$$ to $$$v$$$ consisting only of edges of color $$$c$$$.\nDetermine whether there exists a way to color the edges such that the following conditions are satisfied:\n\nfor each color, there is at least one edge painted in that color;\nfor every pair of colors $$$i$$$ and $$$j$$$ and every pair of vertices $$$u$$$ and $$$v$$$, the following holds: if $$$u$$$ and $$$v$$$ are reachable in color $$$i$$$ and $$$i \\lt j$$$, then they are also reachable in color $$$j$$$.",
+  "input": "The first line contains one integer $$$t$$$ ($$$1 \\le t \\le 1000$$$) — the number of test cases.\nEach test case begins with a line that contains two integers $$$n$$$ and $$$m$$$ ($$$2 \\le n \\le 3000$$$; $$$n - 1 \\le m \\le n + 9$$$) — the number of vertices and edges in the graph.\nEach of the next $$$m$$$ lines of a test case contains two integers $$$u_i$$$ and $$$v_i$$$ ($$$1 \\le u_i, v_i \\le n$$$, $$$u_i \\ne v_i$$$) — the endpoints of the $$$i$$$-th edge.\nAdditional constraints on the input:\n\nthe sum of $$$n$$$ over all test cases does not exceed $$$3000$$$;\nin each test case, the graph has no self-loops or multiple edges;\nin each test case, the graph is connected.",
+  "output": "For each test case, print the answer as follows: if such an edge coloring exists, print\nYES\n; otherwise, print\nNO\n. Each letter may be printed in any case.",
+  "examples": [
+    {
+      "input": "44 61 22 33 11 42 43 43 31 22 33 17 91 22 33 11 44 55 11 66 77 15 81 22 33 44 15 15 25 35 4",
+      "output": "YESNONOYES"
+    }
+  ],
+  "note": "In the first example, it's possible to paint the $$$5$$$-th edge in color $$$1$$$, the $$$1$$$-st and the $$$4$$$-th edge in color $$$2$$$, and all other edges in color $$$3$$$.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156529",
+    "content": "2260F - Edge Three-Coloring\nTutorial\nTutorial is loading...\nSolution\n#include<bits/stdc++.h>\n\nusing namespace std;\n\nconst int N = 3010;\n\nvector<pair<int, int>> g[N];\nint p[N];\nint pe[N];\nint used[N];\nint n, m;\nvector<int> bad_edges;\nint cycle[N];\nint xs[N], ys[N];\n\nvoid dfs1(int x)\n{\nfor(auto [y, i] : g[x])\nif(p[y] == -1)\n{\np[y] = x;\npe[y] = i;\ndfs1(y);\n}\nelse if(p[x] != y)\nbad_edges.push_back(i);\n}\n\nvoid go_to_root(int x)\n{\nwhile(x != 0)\n{\ncycle[pe[x]] ^= 1;\nx = p[x];\n}\n}\n\nvoid dfs2(int x)\n{\nused[x] = true;\nfor(auto [y, i] : g[x])\nif(cycle[i] == 0 && !used[y])\ndfs2(y);\n}\n\nvoid solve()\n{\ncin >> n >> m;\nbad_edges.clear();\nfor(int i = 0; i < n; i++)\n{\ng[i].clear();\np[i] = -1;\npe[i] = -1;\n}\nfor(int i = 0; i < m; i++)\n{\nint x, y;\ncin >> x >> y;\n--x;\n--y;\nxs[i] = x;\nys[i] = y;\ng[x].push_back(make_pair(y, i));\ng[y].push_back(make_pair(x, i));\n}\n\np[0] = 0;\ndfs1(0);\nsort(bad_edges.begin(), bad_edges.end());\nbad_edges.erase(unique(bad_edges.begin(), bad_edges.end()), bad_edges.end());\n\nint k = bad_edges.size();\nfor(int mask = 1; mask < (1 << k); mask++)\n{\nfor(int edge = 0; edge < m; edge++) cycle[edge] = 0;\nfor(int bit = 0; bit < k; bit++)\nif((mask >> bit) & 1)\n{\ngo_to_root(xs[bad_edges[bit]]);\ngo_to_root(ys[bad_edges[bit]]);\ncycle[bad_edges[bit]] ^= 1;\n}\nfor(int vertex = 0; vertex < n; vertex++)\nused[vertex] = 0;\ndfs2(0);\nbool good = true;\nfor(int vertex = 0; vertex < n; vertex++)\nif(!used[vertex])\ngood = false;\nif(good)\n{\ncout << \"YES\\n\";\nreturn;\n}\n}\ncout << \"NO\\n\";\n}\n\nint main()\n{\nios_base::sync_with_stdio(0);\ncin.tie(0);\nint t;\ncin >> t;\nfor(int i = 0; i < t; i++)\nsolve();\n}",
+    "code_blocks": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nconst int N = 3010;\n\nvector<pair<int, int>> g[N];\nint p[N];\nint pe[N];\nint used[N];\nint n, m;\nvector<int> bad_edges;\nint cycle[N];\nint xs[N], ys[N];\n\nvoid dfs1(int x)\n{\n    for(auto [y, i] : g[x])\n        if(p[y] == -1)\n        {\n            p[y] = x;\n            pe[y] = i;\n            dfs1(y);\n        }\n        else if(p[x] != y)\n            bad_edges.push_back(i);\n}\n\nvoid go_to_root(int x)\n{\n    while(x != 0)\n    {\n        cycle[pe[x]] ^= 1;\n        x = p[x];\n    }\n}\n\nvoid dfs2(int x)\n{\n    used[x] = true;\n    for(auto [y, i] : g[x])\n        if(cycle[i] == 0 && !used[y])\n            dfs2(y); \n}\n\nvoid solve()\n{\n    cin >> n >> m;\n    bad_edges.clear();\n    for(int i = 0; i < n; i++)\n    {\n        g[i].clear();\n        p[i] = -1;\n        pe[i] = -1;\n    }\n    for(int i = 0; i < m; i++)\n    {\n        int x, y;\n        cin >> x >> y;\n        --x;\n        --y;\n        xs[i] = x;\n        ys[i] = y;\n        g[x].push_back(make_pair(y, i));\n        g[y].push_back(make_pair(x, i));\n    }\n    \n    p[0] = 0;\n    dfs1(0);\n    sort(bad_edges.begin(), bad_edges.end());\n    bad_edges.erase(unique(bad_edges.begin(), bad_edges.end()), bad_edges.end());\n\n    int k = bad_edges.size();\n    for(int mask = 1; mask < (1 << k); mask++)\n    {\n        for(int edge = 0; edge < m; edge++) cycle[edge] = 0;\n        for(int bit = 0; bit < k; bit++)\n            if((mask >> bit) & 1)\n            {                                                               \n                go_to_root(xs[bad_edges[bit]]);\n                go_to_root(ys[bad_edges[bit]]);\n                cycle[bad_edges[bit]] ^= 1;\n            }\n        for(int vertex = 0; vertex < n; vertex++)\n            used[vertex] = 0;\n        dfs2(0);\n        bool good = true;\n        for(int vertex = 0; vertex < n; vertex++)\n            if(!used[vertex])\n                good = false;\n        if(good)\n        {\n            cout << \"YES\\n\";\n            return;\n        }\n    }\n    cout << \"NO\\n\";\n}\n\nint main()\n{\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    int t;\n    cin >> t;\n    for(int i = 0; i < t; i++)\n        solve();    \n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:29:18.007275+00:00"
+}

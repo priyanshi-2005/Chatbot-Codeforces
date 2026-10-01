@@ -1,0 +1,36 @@
+{
+  "problem_id": "2263B",
+  "contest_id": "2263",
+  "problem_index": "B",
+  "url": "https://codeforces.com/problemset/problem/2263/B",
+  "tags": [
+    "constructive algorithms",
+    "constructive algorithms",
+    "constructive algorithms",
+    "constructive algorithms",
+    "constructive algorithms"
+  ],
+  "rating": 900,
+  "title": "Min Matrices",
+  "time_limit": "1.5 seconds",
+  "memory_limit": "256 megabytes",
+  "description": "Farmer John heard from Elsie that Bessie's favorite number is $$$k$$$, so he wants to surprise her with a handcrafted present.\nFor a 2D matrix $$$B$$$, let $$$f(B)$$$ denote the set of the minimum element of each row and each column of $$$B$$$.\nFarmer John wants you to show him an $$$n \\times n$$$ matrix $$$A$$$ consisting of each number from $$$1$$$ to $$$n^2$$$ exactly once such that $$$|f(A)| = k$$$, or state that it is impossible.",
+  "input": "Each test contains multiple test cases. The first line contains the number of test cases $$$t$$$ ($$$1 \\le t \\le 1000$$$). The description of the test cases follows.\nThe first line of each test case contains two integers $$$n$$$ and $$$k$$$ ($$$1 \\le n \\le 1000, 0 \\le k \\le 2n$$$) — the size of the matrix and the goal value of $$$|f(A)|$$$.\nIt is guaranteed that the sum of $$$n$$$ over all test cases does not exceed $$$1000$$$.",
+  "output": "If there is no such matrix, print $$$-1$$$. Otherwise, print $$$n$$$ lines with $$$n$$$ integers each — an $$$n \\times n$$$ matrix that satisfies the conditions of the problem.\nIf there are multiple solutions, you may output any of them.",
+  "examples": [
+    {
+      "input": "53 03 55 54 31 1",
+      "output": "-1\n8 5 9\n6 3 7\n2 1 4\n16 14 17 15 3\n25 22 5 23 24\n8 1 9 6 7\n4 18 21 19 20\n12 10 13 2 11\n-1\n1 "
+    }
+  ],
+  "note": "In the first test case, we can see that it is impossible to construct such a $$$3 \\times 3$$$ matrix where $$$f(A)$$$ is empty.\nIn the second test case, we can see the minimums of the rows are $$$[5, 3, 1]$$$ respectively, and the minimums of the columns are $$$[2, 1, 4]$$$ respectively. Therefore, $$$f(A) = \\{1, 2, 3, 4, 5\\}$$$, so $$$|f(A)| = 5$$$ as desired.",
+  "editorial": {
+    "available": true,
+    "url": "https://codeforces.com/blog/entry/156688",
+    "content": "2263B - Min Matrices\nAuthor:\nsukon\nTutorial\nTutorial is loading...\nSolution\n#include<bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\nint n, k; cin >> n >> k;\nint x = k-n+1;\nif(!(1 <= x && x <= n)) { cout << -1; return; }\nvector<vector<int>> ans(n, vector<int>(n));\nans[0][0] = 1;\nint on = 2;\nfor(int i = 1; i < x; i++) {\nans[0][i] = on; on++;\nans[i][0] = on; on++;\n}\nfor(int i = x; i < n; i++) {\nans[i][i] = on; on++;\n}\n\nfor(int i = 0; i < n; i++) {\nfor(int j = 0; j < n; j++) {\nif(!ans[i][j]) {\nans[i][j] = on; on++;\n}\n}\n}\n\nfor(int j = 0; j < n; j++) {\nif(j) cout << \"\\n\";\nfor(auto &i : ans[j]) cout << i << \" \";\n}\n}\n\nint main() {\nios::sync_with_stdio(false);\ncin.tie(nullptr);\nint t; cin >> t;\nwhile(t--) {\nsolve();\nif(t) cout << \"\\n\";\n}\n}\n\nRate the problem\n\nAmazing:\n\nGood:\n\nOk:\n\nBad:\n\nTerrible:",
+    "code_blocks": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nvoid solve() {\n    int n, k; cin >> n >> k;\n    int x = k-n+1;\n    if(!(1 <= x && x <= n)) { cout << -1; return; }\n    vector<vector<int>> ans(n, vector<int>(n));\n    ans[0][0] = 1;\n    int on = 2;\n    for(int i = 1; i < x; i++) {\n        ans[0][i] = on; on++;\n        ans[i][0] = on; on++;\n    }\n    for(int i = x; i < n; i++) {\n        ans[i][i] = on; on++;\n    }\n\n    for(int i = 0; i < n; i++) {\n        for(int j = 0; j < n; j++) {\n            if(!ans[i][j]) {\n                ans[i][j] = on; on++;\n            }\n        }\n    }\n\n    for(int j = 0; j < n; j++) {\n        if(j) cout << \"\\n\";\n        for(auto &i : ans[j]) cout << i << \" \";\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int t; cin >> t;\n    while(t--) {\n        solve();\n        if(t)   cout << \"\\n\";\n    }\n}"
+    ]
+  },
+  "scraped_at": "2026-09-30T23:28:52.080493+00:00"
+}
